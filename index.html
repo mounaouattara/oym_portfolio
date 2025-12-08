@@ -3,43 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio | Coming Soon</title>
+    <title>Mouna Ouattara | Data Scientist</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    
-    <!-- Tailwind CSS (CDN for standalone usage) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P1GRTS7D6G"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
 
-    gtag('config', 'G-P1GRTS7D6G');
-    </script>
+     <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['Outfit', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        cyber: {
+                            dark: '#050a14',
+                            light: '#0ea5e9',
+                            accent: '#f43f5e',
+                            glass: 'rgba(15, 23, 42, 0.6)'
+                        }
                     },
                     animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'float-delayed': 'float 6s ease-in-out 3s infinite',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 15s linear infinite',
+                        'pulse-glow': 'pulseGlow 3s infinite',
+                        'glitch': 'glitch 1s linear infinite',
                     },
                     keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 10px rgba(14, 165, 233, 0.1)' },
+                            '50%': { boxShadow: '0 0 25px rgba(14, 165, 233, 0.4)' },
+                        },
+                        glitch: {
+                            '2%, 64%': { transform: 'translate(2px,0) skew(0deg)' },
+                            '4%, 60%': { transform: 'translate(-2px,0) skew(0deg)' },
+                            '62%': { transform: 'translate(0,0) skew(5deg)' },
                         }
                     }
                 }
@@ -49,188 +54,644 @@
 
     <style>
         body {
-            background-color: #020617; /* Slate 950 */
+            background-color: #050a14;
             color: #ffffff;
+            margin: 0;
             overflow-x: hidden;
+            cursor: default;
         }
         
-        /* Custom grainy texture overlay */
-        .bg-noise {
+        #canvas-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: 50;
-            opacity: 0.05;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            z-index: 0;
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
         }
 
-        /* Gradient Blob Animation */
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.4;
-            z-index: 0;
-            animation: move 25s infinite alternate;
+        /* SVG Overlay for connection lines */
+        #connections-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 20; /* Above bg, below content */
+            pointer-events: none;
         }
-        @keyframes move {
-            from { transform: translate(0, 0) scale(1); }
-            to { transform: translate(20px, -20px) scale(1.1); }
+
+        .connection-line {
+            fill: none;
+            stroke: #0ea5e9;
+            stroke-width: 2;
+            stroke-linecap: round;
+            filter: drop-shadow(0 0 5px #0ea5e9);
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawLine 1s forwards ease-out;
+        }
+
+        @keyframes drawLine {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Glassmorphism Card with Spotlight */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: border-color 0.3s;
+        }
+        
+        /* Spotlight effect via JS radial gradient on this class */
+        .spotlight-card {
+            background-image: radial-gradient(
+                600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+                rgba(14, 165, 233, 0.1), 
+                transparent 40%
+            );
+        }
+
+        /* Interactive Keywords in text */
+        .neuro-link {
+            color: #0ea5e9;
+            border-bottom: 1px dashed #0ea5e9;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            display: inline-block;
+        }
+        .neuro-link:hover {
+            color: #fff;
+            text-shadow: 0 0 10px #0ea5e9;
+            border-bottom-style: solid;
+        }
+
+        /* Glitch Effect Class */
+        .glitch-text {
+            position: relative;
+        }
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #050a14;
+        }
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -1px 0 #0ea5e9;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -1px 0 #f43f5e;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim {
+            0% { clip: rect(31px, 9999px, 94px, 0); }
+            20% { clip: rect(10px, 9999px, 4px, 0); }
+            40% { clip: rect(68px, 9999px, 86px, 0); }
+            60% { clip: rect(12px, 9999px, 20px, 0); }
+            80% { clip: rect(54px, 9999px, 64px, 0); }
+            100% { clip: rect(35px, 9999px, 29px, 0); }
+        }
+        @keyframes glitch-anim2 {
+            0% { clip: rect(69px, 9999px, 63px, 0); }
+            20% { clip: rect(7px, 9999px, 79px, 0); }
+            40% { clip: rect(21px, 9999px, 26px, 0); }
+            60% { clip: rect(96px, 9999px, 7px, 0); }
+            80% { clip: rect(5px, 9999px, 49px, 0); }
+            100% { clip: rect(61px, 9999px, 90px, 0); }
+        }
+
+        /* Typewriter Cursor */
+        .cursor-blink {
+            display: inline-block;
+            width: 8px;
+            height: 1.2em;
+            background-color: #0ea5e9;
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Circular Text Animation */
+        .circular-text {
+            animation: spin 20s linear infinite;
+            transform-origin: center;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* CV Menu Transition */
+        #cv-options {
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Target Highlight Animation */
+        .target-active {
+            box-shadow: 0 0 30px #0ea5e9, inset 0 0 10px #0ea5e9;
+            border-color: #0ea5e9 !important;
+            transform: scale(1.1);
+            z-index: 50;
+        }
+        .icon-active {
+            color: #0ea5e9 !important;
+            text-shadow: 0 0 15px #0ea5e9;
+            transform: scale(1.2);
         }
     </style>
-<script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.1/",
-    "react": "https://aistudiocdn.com/react@^19.2.1",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
-    "framer-motion": "https://aistudiocdn.com/framer-motion@^12.23.25"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center relative selection:bg-indigo-500 selection:text-white">
+<body class="selection:bg-cyan-500 selection:text-white">
 
-    <!-- Noise Overlay -->
-    <div class="bg-noise"></div>
+    <!-- Interactive Neural Network Background -->
+    <div id="canvas-container">
+        <canvas id="neuro-canvas"></canvas>
+    </div>
+    
+    <!-- SVG Layer for Drawing Connections -->
+    <svg id="connections-layer"></svg>
 
-    <!-- Background Blobs -->
-    <div class="blob bg-violet-600 w-96 h-96 top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
-    <div class="blob bg-indigo-600 w-[30rem] h-[30rem] bottom-0 right-0 translate-x-1/3 translate-y-1/3 animation-delay-2000"></div>
-    <div class="blob bg-fuchsia-600 w-80 h-80 bottom-10 left-20 opacity-20"></div>
+    <!-- Language Switcher (Top Left) -->
+    <nav id="nav-lang" class="fixed top-8 left-8 z-50 flex items-center gap-3 transition-all duration-300">
+        <div class="glass-panel px-1 py-1 rounded-full flex gap-1">
+            <button onclick="setLang('en')" id="btn-en" class="px-4 py-1.5 rounded-full text-xs font-mono font-bold transition-all duration-300 bg-cyan-500/20 text-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.3)]">ENG</button>
+            <button onclick="setLang('fr')" id="btn-fr" class="px-4 py-1.5 rounded-full text-xs font-mono font-bold transition-all duration-300 text-slate-400 hover:text-white">FR</button>
+        </div>
+    </nav>
 
-    <!-- Main Content -->
-    <main class="relative z-10 w-full max-w-3xl px-6 py-12 flex flex-col items-center text-center">
+    <!-- Main Content Centered -->
+    <main class="relative z-30 min-h-screen flex flex-col items-center justify-center p-6">
         
-        <!-- Badge -->
-        <div class="animate-fade-in-down mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-lg hover:bg-white/10 transition-colors cursor-default">
-            <span class="relative flex h-2.5 w-2.5">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
-            </span>
-            <span class="text-xs font-semibold text-slate-300 tracking-wider uppercase">Upgrade in Progress</span>
-        </div>
-
-        <!-- Headline -->
-        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight">
-            Building something <br/>
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-indigo-400 animate-pulse-slow">
-                exceptional.
-            </span>
-        </h1>
-
-        <!-- Subtext -->
-        <p class="text-lg md:text-xl text-slate-400 max-w-2xl mb-10 leading-relaxed font-light">
-            I'm currently re-architecting my portfolio to better reflect my latest work. 
-            The site is undergoing a strategic renovation to ensure a seamless experience.
-        </p>
-
-        <!-- Progress Bar Visual -->
-        <div class="w-full max-w-sm h-1 bg-slate-800 rounded-full overflow-hidden mb-12 relative">
-            <div class="absolute top-0 left-0 h-full bg-gradient-to-r from-violet-500 to-indigo-500 w-[75%] rounded-full shadow-[0_0_10px_rgba(139,92,246,0.5)]"></div>
-        </div>
-
-        <!-- Newsletter / Contact Form -->
-        <div class="w-full max-w-sm relative group">
-            <div class="absolute -inset-0.5 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-lg blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
-            <form id="notifyForm" class="relative flex items-center bg-slate-900 rounded-lg p-1 border border-white/10 shadow-2xl">
-                <div class="pl-4 text-slate-500">
-                    <i class="fa-regular fa-envelope"></i>
+        <!-- The Card with Spotlight Effect -->
+        <div id="main-card" class="glass-panel spotlight-card rounded-2xl p-8 md:p-12 max-w-4xl w-full relative overflow-hidden group">
+            
+            <!-- Top Bar decoration -->
+            <div class="flex justify-between items-center mb-10 border-b border-white/5 pb-4">
+                <div class="flex gap-2">
+                    <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
                 </div>
-                <input 
-                    type="email" 
-                    id="emailInput"
-                    placeholder="Enter your email address"
-                    class="w-full bg-transparent border-none focus:ring-0 text-sm text-white placeholder-slate-500 py-3 px-3 outline-none"
-                    required
-                >
-                <button 
-                    type="submit"
-                    id="submitBtn"
-                    class="bg-white text-slate-950 hover:bg-slate-200 transition-all duration-300 px-5 py-2 rounded-md font-semibold text-sm flex items-center gap-2"
-                >
-                    <span>Notify Me</span>
-                    <i class="fa-solid fa-arrow-right text-xs"></i>
-                </button>
-            </form>
-            <p id="successMessage" class="hidden text-green-400 text-xs mt-3 font-medium transition-all">
-                <i class="fa-solid fa-check-circle mr-1"></i> You're on the list!
-            </p>
-            <p class="text-xs text-slate-600 mt-3" id="legalText">I will only send one email: when the site goes live.</p>
+                <div class="font-mono text-xs text-slate-500 flex items-center gap-2">
+                    <span class="w-2 h-2 bg-cyan-500 rounded-full animate-pulse"></span>
+                    kernel_active
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-5 gap-10">
+                
+                <!-- Left Column: Title & Status -->
+                <div class="md:col-span-3 space-y-6">
+                    <div>
+                        <div class="inline-block px-3 py-1 rounded border border-cyan-500/30 bg-cyan-950/30 text-cyan-400 text-[10px] font-mono tracking-widest uppercase mb-4">
+                            System Status: Upgrade in Progress
+                        </div>
+                        <h1 class="text-5xl md:text-7xl font-bold tracking-tighter text-white mb-2 font-sans">
+                            <span class="glitch-text" data-text="MOUNA">MOUNA</span><br/>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">OUATTARA.</span>
+                        </h1>
+                    </div>
+
+                    <!-- Typewriter Area: Technical Titles -->
+                    <div class="h-[30px] flex items-center">
+                        <span class="text-cyan-400 font-mono mr-2">></span>
+                        <p class="text-xl md:text-2xl text-cyan-300 font-mono font-bold tracking-tight">
+                            <span id="typewriter-text"></span><span class="cursor-blink"></span>
+                        </p>
+                    </div>
+
+                    <!-- Static Info Text: Humane Bio -->
+                    <div id="static-content" class="font-sans text-slate-300 text-lg leading-7 font-light mt-8 opacity-0 translate-y-4 transition-all duration-1000 delay-500">
+                        <!-- Content populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Right Column: Stats & Decoration -->
+                <div class="md:col-span-2 flex flex-col justify-between border-t md:border-t-0 md:border-l border-white/5 pt-8 md:pt-0 md:pl-8">
+                    
+                    <!-- Stats Block -->
+                    <div class="space-y-6">
+                        <div>
+                            <div class="text-xs font-mono text-slate-500 mb-1">CURRENT EPOCH</div>
+                            <div class="text-3xl font-mono font-bold text-white">42<span class="text-cyan-500">/100</span></div>
+                            <div class="w-full h-1 bg-slate-800 mt-2 rounded-full overflow-hidden">
+                                <div class="h-full bg-cyan-500 w-[42%] shadow-[0_0_10px_#0ea5e9]"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="text-xs font-mono text-slate-500 mb-1">MODEL ACCURACY</div>
+                            <div class="text-3xl font-mono font-bold text-white">98.4<span class="text-xs text-slate-600 ml-1">%</span></div>
+                        </div>
+
+                        <div>
+                            <div class="text-xs font-mono text-slate-500 mb-1">LAST COMMIT</div>
+                            <div class="font-mono text-xs text-green-400">
+                                git commit -m "coffee break"
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Socials -->
+                    <div class="flex gap-4 mt-8">
+                        <a id="link-linkedin" href="https://www.linkedin.com/in/mouna-ouattara/" target="_blank" class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center hover:bg-cyan-500 hover:text-black transition-all duration-300 group/icon">
+                            <i class="fa-brands fa-linkedin text-lg"></i>
+                        </a>
+                        <a id="link-github" href="https://github.com/mounaouattara" target="_blank" class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center hover:bg-cyan-500 hover:text-black transition-all duration-300 group/icon">
+                            <i class="fa-brands fa-github text-lg"></i>
+                        </a>
+                        <a id="link-mail" href="mailto:mounaouattara04@gmail.com" class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center hover:bg-cyan-500 hover:text-black transition-all duration-300 group/icon">
+                            <i class="fa-solid fa-envelope text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom decorative code -->
+            <div class="absolute bottom-2 right-4 text-[10px] font-mono text-white/10 select-none">
+                class Portfolio(BaseModel): pass
+            </div>
         </div>
 
-        <!-- Footer / Socials -->
-        <footer class="mt-20 flex flex-col items-center gap-6 animate-float-delayed">
-            <div class="flex items-center gap-6">
-                <a href="https://github.com" target="_blank" class="text-slate-500 hover:text-white transition-transform hover:-translate-y-1 duration-300">
-                    <i class="fa-brands fa-github text-2xl"></i>
-                </a>
-                <div class="w-px h-4 bg-slate-800"></div>
-                <a href="https://linkedin.com" target="_blank" class="text-slate-500 hover:text-white transition-transform hover:-translate-y-1 duration-300">
-                    <i class="fa-brands fa-linkedin text-2xl"></i>
-                </a>
-                <div class="w-px h-4 bg-slate-800"></div>
-                <a href="mailto:contact@example.com" class="text-slate-500 hover:text-white transition-transform hover:-translate-y-1 duration-300">
-                    <i class="fa-solid fa-envelope text-2xl"></i>
-                </a>
-            </div>
-            <p class="text-slate-700 text-sm font-medium">
-                &copy; <script>document.write(new Date().getFullYear())</script> My Portfolio.
-            </p>
-        </footer>
+        <div class="mt-8 text-xs font-mono text-slate-600">
+            <span id="txt-footer">© 2025 Made with ☕ & Python</span>
+        </div>
 
     </main>
 
-    <!-- Decorative Floating Icons -->
-    <div class="absolute top-[15%] left-[10%] text-slate-800 text-4xl animate-float opacity-50 select-none pointer-events-none">
-        <i class="fa-solid fa-code"></i>
-    </div>
-    <div class="absolute bottom-[20%] right-[10%] text-slate-800 text-3xl animate-float-delayed opacity-50 select-none pointer-events-none">
-        <i class="fa-solid fa-terminal"></i>
+    <!-- SPINNING CV BUTTON (Bottom Right) -->
+    <div id="cv-container" class="fixed bottom-8 right-8 z-50 flex flex-col items-center group/cvbtn transition-all duration-300">
+        
+        <!-- CV Options Popup -->
+        <div id="cv-options" class="absolute bottom-24 opacity-0 pointer-events-none translate-y-4 flex flex-col gap-1 glass-panel p-1 rounded-xl shadow-2xl origin-bottom">
+            <a href="cv-fr.pdf" download class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-cyan-500/20 text-slate-300 hover:text-cyan-300 transition-colors">
+                <span class="font-mono text-xs font-bold">FR</span>
+                <span class="text-sm">Français</span>
+                <i class="fa-solid fa-download ml-auto text-xs opacity-50"></i>
+            </a>
+            <div class="h-px bg-white/5 w-full mx-auto"></div>
+            <a href="cv-en.pdf" download class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-cyan-500/20 text-slate-300 hover:text-cyan-300 transition-colors">
+                <span class="font-mono text-xs font-bold">EN</span>
+                <span class="text-sm">English</span>
+                <i class="fa-solid fa-download ml-auto text-xs opacity-50"></i>
+            </a>
+        </div>
+
+        <!-- The Trigger Button -->
+        <button id="btn-cv-trigger" onclick="toggleCV()" class="relative block w-24 h-24 focus:outline-none transition-all active:scale-95 duration-300">
+            <!-- Spinning SVG Text -->
+            <svg class="w-full h-full circular-text" viewBox="0 0 100 100">
+                <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="transparent" />
+                <text class="fill-cyan-500 text-[10.5px] font-mono font-bold tracking-[0.2em] uppercase shadow-lg">
+                    <textPath id="txt-spin" href="#circlePath" startOffset="0%">
+                        DOWNLOAD CV • DOWNLOAD CV •
+                    </textPath>
+                </text>
+            </svg>
+            
+            <!-- Center Icon -->
+            <div id="cv-center-icon" class="absolute inset-0 flex items-center justify-center">
+                <div class="w-12 h-12 rounded-full bg-cyan-500 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.6)] group-hover/cvbtn:shadow-[0_0_35px_rgba(6,182,212,0.8)] transition-all duration-300">
+                    <i class="fa-solid fa-file-arrow-down text-xl text-black"></i>
+                </div>
+            </div>
+        </button>
     </div>
 
+    <!-- Script: Content, Interaction, Canvas -->
     <script>
-        // Simple JS for the form interaction
-        document.getElementById('notifyForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            const input = document.getElementById('emailInput');
-            const successMsg = document.getElementById('successMessage');
-            const legalText = document.getElementById('legalText');
-
-            if(input.value) {
-                // Simulate loading
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-                btn.style.opacity = '0.7';
+        // --- 1. LANGUAGE & CONTENT ---
+        const content = {
+            en: {
+                // Short, punchy titles for the typewriter
+                titles: ["Data Scientist.", "Machine Learning.", "Data Analysis."],
                 
-                setTimeout(() => {
-                    btn.innerHTML = 'Saved';
-                    btn.classList.remove('bg-white', 'text-slate-950');
-                    btn.classList.add('bg-green-500', 'text-white');
-                    successMsg.classList.remove('hidden');
-                    legalText.style.display = 'none';
-                    input.value = '';
-                    input.disabled = true;
+                // The "Humane" bio content
+                descHTML: `
+                    <p class="mb-4">
+                        Hi, I’m a curious and adaptable professional with a main focus on Data Science.
+                    </p>
+                    <p class="mb-4">
+                        I enjoy exploring new technologies, understanding how systems work, and turning complex problems into practical, reliable solutions, especially when collaborating with diverse and engaging teams.
+                    </p>
+                    <p class="mb-4 text-base text-slate-400 font-mono mt-6">
+                        While I deploy the new version of this portfolio, you can access my detailed experience via my 
+                        <span class="neuro-link font-bold" data-target="cv-container">resume</span> or 
+                        <span class="neuro-link font-bold" data-target="link-linkedin">LinkedIn</span>.
+                    </p>
+                    <p class="text-cyan-400 text-sm font-mono">
+                        > Open to new <span class="neuro-link" data-target="link-mail">opportunities</span>.
+                    </p>
+                `,
+                footer: "© 2025 Made with ☕ ",
+                spin: "DOWNLOAD CV • DOWNLOAD CV •"
+            },
+            fr: {
+                // Short, punchy titles for the typewriter
+                titles: ["Data Scientist.", "Machine Learning.", "Analyse de Données."],
+                
+                // The "Humane" bio content
+                descHTML: `
+                    <p class="mb-4">
+                        Bonjour, je suis une professionnelle curieuse et adaptable, avec un intérêt principal pour la Data Science.
+                    </p>
+                    <p class="mb-4">
+                        J'aime explorer de nouvelles technologies, comprendre le fonctionnement des systèmes et transformer des problèmes complexes en solutions pratiques et fiables, particulièrement en collaborant avec des équipes diversifiées et motivantes.
+                    </p>
+                    <p class="mb-4 text-base text-slate-400 font-mono mt-6">
+                        En attendant le déploiement de ce portfolio, retrouvez mon parcours détaillé sur mon 
+                        <span class="neuro-link font-bold" data-target="cv-container">CV</span> ou mon 
+                        <span class="neuro-link font-bold" data-target="link-linkedin">LinkedIn</span>.
+                    </p>
+                    <p class="text-cyan-400 text-sm font-mono">
+                        > Disponible pour de nouvelles <span class="neuro-link" data-target="link-mail">opportunités</span>.
+                    </p>
+                `,
+                footer: "© 2025 Fait avec ☕ & Python",
+                spin: "TELECHARGER CV • TELECHARGER CV •"
+            }
+        };
+
+        let currentLang = 'en';
+        let typingTimeout;
+        let titleIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function setLang(lang) {
+            currentLang = lang;
+            
+            // Button Styles
+            const btnEn = document.getElementById('btn-en');
+            const btnFr = document.getElementById('btn-fr');
+            const activeClass = "bg-cyan-500/20 text-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.3)]";
+            const inactiveClass = "text-slate-400 hover:text-white bg-transparent shadow-none";
+
+            if (lang === 'en') {
+                btnEn.className = `px-4 py-1.5 rounded-full text-xs font-mono font-bold transition-all duration-300 ${activeClass}`;
+                btnFr.className = `px-4 py-1.5 rounded-full text-xs font-mono font-bold transition-all duration-300 ${inactiveClass}`;
+            } else {
+                btnFr.className = `px-4 py-1.5 rounded-full text-xs font-mono font-bold transition-all duration-300 ${activeClass}`;
+                btnEn.className = `px-4 py-1.5 rounded-full text-xs font-mono font-bold transition-all duration-300 ${inactiveClass}`;
+            }
+
+            // Update Content
+            const staticContent = document.getElementById('static-content');
+            staticContent.innerHTML = content[lang].descHTML;
+            
+            document.getElementById('txt-footer').innerText = content[lang].footer;
+            document.getElementById('txt-spin').textContent = content[lang].spin;
+
+            // Re-attach listeners for new DOM elements
+            attachNeuroLinks();
+            
+            // Restart Typewriter
+            titleIndex = 0;
+            charIndex = 0;
+            isDeleting = false;
+            startTypewriter();
+        }
+
+        // --- 2. TYPEWRITER EFFECT (Looping Titles) ---
+        function startTypewriter() {
+            const textElement = document.getElementById('typewriter-text');
+            const titles = content[currentLang].titles;
+            const currentTitle = titles[titleIndex];
+            
+            clearTimeout(typingTimeout);
+
+            if (isDeleting) {
+                textElement.innerText = currentTitle.substring(0, charIndex - 1);
+                charIndex--;
+                if (charIndex === 0) {
+                    isDeleting = false;
+                    titleIndex = (titleIndex + 1) % titles.length;
+                    typingTimeout = setTimeout(startTypewriter, 500);
+                } else {
+                    typingTimeout = setTimeout(startTypewriter, 50);
+                }
+            } else {
+                textElement.innerText = currentTitle.substring(0, charIndex + 1);
+                charIndex++;
+                if (charIndex === currentTitle.length) {
+                    isDeleting = true;
+                    typingTimeout = setTimeout(startTypewriter, 2000); // Wait before deleting
+                } else {
+                    typingTimeout = setTimeout(startTypewriter, 100);
+                }
+            }
+        }
+
+        // --- 3. NEURAL LINKS (Draw connection lines) ---
+        function attachNeuroLinks() {
+            const links = document.querySelectorAll('.neuro-link');
+            links.forEach(link => {
+                link.addEventListener('mouseenter', (e) => {
+                    const targetId = link.getAttribute('data-target');
+                    const targetEl = document.getElementById(targetId);
                     
-                    // Reset after 3 seconds (optional)
-                    setTimeout(() => {
-                        btn.innerHTML = originalText;
-                        btn.classList.add('bg-white', 'text-slate-950');
-                        btn.classList.remove('bg-green-500', 'text-white');
-                        successMsg.classList.add('hidden');
-                        legalText.style.display = 'block';
-                        input.disabled = false;
-                        btn.style.opacity = '1';
-                    }, 4000);
-                }, 800);
+                    if(targetEl) {
+                        // Highlight target
+                        if(targetId.includes('link')) {
+                             targetEl.classList.add('icon-active');
+                        } else {
+                             targetEl.classList.add('target-active');
+                             // If it's the CV container, make the icon pulse
+                             if(targetId === 'cv-container') {
+                                document.getElementById('cv-center-icon').classList.add('scale-110', 'shadow-[0_0_50px_#0ea5e9]');
+                             }
+                        }
+
+                        // Draw SVG Line
+                        drawConnection(link, targetEl);
+                    }
+                });
+
+                link.addEventListener('mouseleave', (e) => {
+                    const targetId = link.getAttribute('data-target');
+                    const targetEl = document.getElementById(targetId);
+                    if(targetEl) {
+                        targetEl.classList.remove('target-active', 'icon-active');
+                        if(targetId === 'cv-container') {
+                             document.getElementById('cv-center-icon').classList.remove('scale-110', 'shadow-[0_0_50px_#0ea5e9]');
+                        }
+                    }
+                    // Remove SVG Line
+                    const svg = document.getElementById('connections-layer');
+                    svg.innerHTML = '';
+                });
+            });
+        }
+
+        function drawConnection(startEl, endEl) {
+            const svg = document.getElementById('connections-layer');
+            const startRect = startEl.getBoundingClientRect();
+            const endRect = endEl.getBoundingClientRect();
+
+            // Calculate centers
+            const x1 = startRect.left + startRect.width / 2;
+            const y1 = startRect.top + startRect.height / 2;
+            const x2 = endRect.left + endRect.width / 2;
+            const y2 = endRect.top + endRect.height / 2;
+
+            // Create Path (Curved)
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            
+            // Bezier curve logic for nice flow
+            const deltaX = x2 - x1;
+            const deltaY = y2 - y1;
+            const midX = (x1 + x2) / 2;
+            const midY = (y1 + y2) / 2;
+            
+            // Curve control point depends on relative positions
+            const cpX = midX; 
+            const cpY = Math.min(y1, y2) - 100; // Curve upwards slightly
+
+            const d = `M ${x1} ${y1} Q ${cpX} ${cpY} ${x2} ${y2}`;
+            
+            path.setAttribute("d", d);
+            path.classList.add('connection-line');
+            svg.appendChild(path);
+        }
+
+        // --- 4. SPOTLIGHT EFFECT ---
+        document.getElementById('main-card').addEventListener('mousemove', (e) => {
+            const card = e.currentTarget;
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+
+        // Initialize content
+        window.onload = () => {
+            setLang('en');
+            setTimeout(() => {
+                document.getElementById('static-content').classList.remove('opacity-0', 'translate-y-4');
+            }, 1000);
+            initCanvas();
+        };
+
+        // --- 5. CV MENU TOGGLE ---
+        function toggleCV() {
+            const menu = document.getElementById('cv-options');
+            const isVisible = menu.style.opacity === '1';
+            
+            if (isVisible) {
+                menu.style.opacity = '0';
+                menu.style.transform = 'translateY(16px)';
+                menu.style.pointerEvents = 'none';
+            } else {
+                menu.style.opacity = '1';
+                menu.style.transform = 'translateY(0)';
+                menu.style.pointerEvents = 'auto';
+            }
+        }
+        
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('cv-options');
+            const btn = document.getElementById('btn-cv-trigger');
+            if (menu && btn && !menu.contains(e.target) && !btn.contains(e.target)) {
+                 menu.style.opacity = '0';
+                 menu.style.transform = 'translateY(16px)';
+                 menu.style.pointerEvents = 'none';
             }
         });
+
+        // --- 6. NEURAL NETWORK CANVAS BACKGROUND ---
+        function initCanvas() {
+            const canvas = document.getElementById('neuro-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+            const particleCount = window.innerWidth < 768 ? 40 : 70;
+            const connectionDistance = 140;
+
+            function resize() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+                createParticles();
+            }
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.3;
+                    this.vy = (Math.random() - 0.5) * 0.3;
+                    this.size = Math.random() * 2 + 0.5;
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = '#0ea5e9';
+                    ctx.fill();
+                }
+            }
+
+            function createParticles() {
+                particles = [];
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                    for (let j = i; j < particles.length; j++) {
+                        let dx = particles[i].x - particles[j].x;
+                        let dy = particles[i].y - particles[j].y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < connectionDistance) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(14, 165, 233, ${0.15 - distance / connectionDistance * 0.15})`;
+                            ctx.lineWidth = 1;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+            animate();
+        }
     </script>
-<script type="module" src="/index.tsx"></script>
 </body>
 </html>
