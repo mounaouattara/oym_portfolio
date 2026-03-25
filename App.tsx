@@ -166,6 +166,8 @@ const App: React.FC = () => {
       module99: 'Module_99 // Cyber_Interface',
       revert: 'Revert_Protocol?',
       burst: 'Burst_the_core?',
+      burstBubble: 'CLIQUE / ÉCLATE LA BULLE',
+      closeCore: 'REFERME',
       lost: '"lost in the grid"',
       giveItATry: '"give it a try" — whispered the heart',
       downloadCV: 'Télécharger CV',
@@ -198,6 +200,8 @@ const App: React.FC = () => {
       module99: 'Module_99 // Cyber_Interface',
       revert: 'Revert_Protocol?',
       burst: 'Burst_the_core?',
+      burstBubble: 'CLICK / BURST THE BUBBLE',
+      closeCore: 'CLOSE',
       lost: '"lost in the grid"',
       giveItATry: '"give it a try" — whispered the heart',
       downloadCV: 'Download CV',
@@ -287,20 +291,16 @@ const App: React.FC = () => {
               {/* Central Content */}
               <div className="relative z-20 flex flex-col items-center gap-12">
                 <div className="relative group">
-                  {/* CV Download Icon on Hover */}
+                  {/* Bubble Interaction Hint on Hover */}
                   <motion.div 
                     className={`absolute -top-10 -right-10 z-40 p-3 rounded-full border transition-all duration-500 cursor-pointer flex items-center gap-2 opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 ${isCyberMode ? 'bg-cyan-500/20 border-cyan-400 text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.5)]' : 'bg-white border-black/10 text-black shadow-lg'}`}
                     onClick={(e) => {
                       e.stopPropagation();
-                      // Logic to download CV
-                      const link = document.createElement('a');
-                      link.href = '#'; // Replace with actual CV path
-                      link.download = 'CV_Mouna_Ouattara.pdf';
-                      link.click();
+                      setIsCyberMode(!isCyberMode);
                     }}
                   >
-                    <Download size={16} />
-                    <span className="text-[8px] font-mono font-bold uppercase tracking-widest">{t.downloadCV}</span>
+                    {isCyberMode ? <X size={16} /> : <Zap size={16} />}
+                    <span className="text-[8px] font-mono font-bold uppercase tracking-widest">{isCyberMode ? t.closeCore : t.burstBubble}</span>
                   </motion.div>
 
                   <motion.div 
@@ -675,24 +675,6 @@ const App: React.FC = () => {
         {/* Right Side: Navigation Links */}
         <div className="pointer-events-auto flex flex-col items-end gap-6">
           <div className="flex items-center gap-10">
-            {/* Language Switcher */}
-            <div className="flex items-center gap-2 mr-4 border-r border-black/10 pr-4">
-              <Globe size={12} className="opacity-40" />
-              <button 
-                onClick={() => setLang('fr')}
-                className={`text-[9px] font-bold transition-all ${lang === 'fr' ? 'text-black' : 'text-black/30 hover:text-black/60'}`}
-              >
-                FR
-              </button>
-              <span className="text-[9px] opacity-20">/</span>
-              <button 
-                onClick={() => setLang('en')}
-                className={`text-[9px] font-bold transition-all ${lang === 'en' ? 'text-black' : 'text-black/30 hover:text-black/60'}`}
-              >
-                EN
-              </button>
-            </div>
-
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -725,6 +707,53 @@ const App: React.FC = () => {
           {renderSection()}
         </AnimatePresence>
       </main>
+
+      {/* Bottom Right Controls: CV & Languages */}
+      <div className="fixed bottom-20 right-10 z-[100] flex flex-col items-end gap-4 pointer-events-none">
+        {/* Download CV Button */}
+        <motion.button
+          whileHover={{ scale: 1.05, x: -5 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => {
+            const link = document.createElement('a');
+            link.href = '/CV_Mouna_Ouattara.pdf'; // Path to the file in the public folder
+            link.download = 'CV_Mouna_Ouattara.pdf';
+            link.click();
+          }}
+          className={`pointer-events-auto flex items-center gap-3 px-6 py-3 border font-mono transition-all duration-500 group ${
+            isCyberMode 
+              ? 'bg-cyan-500/10 border-cyan-400 text-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:bg-cyan-500/20' 
+              : 'bg-white border-black/10 text-black hover:bg-black hover:text-white shadow-lg'
+          }`}
+        >
+          <Download size={14} className="group-hover:animate-bounce" />
+          <span className="text-[10px] font-bold uppercase tracking-[0.3em]">{t.downloadCV}</span>
+        </motion.button>
+
+        {/* Language Switcher */}
+        <div className={`pointer-events-auto flex items-center gap-4 px-6 py-2 border font-mono transition-all duration-500 ${
+          isCyberMode 
+            ? 'bg-black/40 border-cyan-400/30 text-cyan-400' 
+            : 'bg-white/80 border-black/5 text-black'
+        }`}>
+          <Globe size={12} className={isCyberMode ? 'text-cyan-400' : 'opacity-40'} />
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => setLang('fr')}
+              className={`text-[10px] font-bold transition-all ${lang === 'fr' ? (isCyberMode ? 'text-cyan-400' : 'text-black') : 'opacity-30 hover:opacity-60'}`}
+            >
+              FR
+            </button>
+            <span className="text-[10px] opacity-20">/</span>
+            <button 
+              onClick={() => setLang('en')}
+              className={`text-[10px] font-bold transition-all ${lang === 'en' ? (isCyberMode ? 'text-cyan-400' : 'text-black') : 'opacity-30 hover:opacity-60'}`}
+            >
+              EN
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* Bottom HUD Status Bar */}
       <div className="fixed bottom-0 left-0 w-full h-12 border-t border-black/5 bg-white/60 backdrop-blur-md z-50 flex items-center justify-between px-10 font-mono text-[10px] tracking-widest text-black/40">
