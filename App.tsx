@@ -74,47 +74,47 @@ const PageLayout: React.FC<{
 }> = ({ number, label, title, subLabel1, subLabel2, description, menuItems, children }) => (
   <div className="flex w-full min-h-full">
     {/* Left Vertical Title Column */}
-    <div className="w-24 md:w-32 border-r border-black/10 flex flex-col items-center py-32 sticky top-0 h-screen">
-      <div className="flex flex-col items-center gap-8">
-        <span className="text-4xl font-bold font-mono opacity-10">{number}</span>
-        <div className="h-32 w-[1px] bg-black/10" />
-        <div className="writing-vertical-rl rotate-180 flex flex-col gap-4 items-center">
-          <span className="micro-label whitespace-nowrap">{label}</span>
-          <h2 className="display-text text-2xl whitespace-nowrap">{title}</h2>
+    <div className="w-16 md:w-32 border-r border-black/10 flex flex-col items-center py-12 md:py-32 sticky top-0 h-screen">
+      <div className="flex flex-col items-center gap-4 md:gap-8">
+        <span className="text-2xl md:text-4xl font-bold font-mono opacity-10">{number}</span>
+        <div className="h-16 md:h-32 w-[1px] bg-black/10" />
+        <div className="writing-vertical-rl rotate-180 flex flex-col gap-2 md:gap-4 items-center">
+          <span className="micro-label whitespace-nowrap text-[8px] md:text-[10px]">{label}</span>
+          <h2 className="display-text text-lg md:text-2xl whitespace-nowrap">{title}</h2>
         </div>
       </div>
     </div>
     
     {/* Main Content Area */}
-    <div className="flex-1 px-12 md:px-20 py-32">
+    <div className="flex-1 px-6 md:px-20 py-12 md:py-32">
       {/* Page Introduction & Mini-Menu (At a glance) */}
       {(description || menuItems) && (
-        <div className="mb-20 border-b border-black/10 pb-12">
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12">
+        <div className="mb-12 md:mb-20 border-b border-black/10 pb-8 md:pb-12">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 md:gap-12">
             <div className="max-w-2xl">
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-3 mb-4 md:mb-6">
                 <div className="w-2 h-2 bg-black rounded-full animate-pulse" />
-                <span className="text-[10px] font-mono font-bold uppercase tracking-[0.4em]">Page_Overview</span>
+                <span className="text-[8px] md:text-[10px] font-mono font-bold uppercase tracking-[0.3em] md:tracking-[0.4em]">Page_Overview</span>
               </div>
-              <h1 className="text-4xl md:text-6xl font-mono font-bold text-fg mb-6 uppercase tracking-tighter leading-none">
+              <h1 className="text-3xl md:text-6xl font-mono font-bold text-fg mb-4 md:mb-6 uppercase tracking-tighter leading-none">
                 {title.replace('_', ' ')}
               </h1>
               {description && (
-                <p className="text-sm font-mono text-black/60 leading-relaxed italic">
+                <p className="text-xs md:text-sm font-mono text-black/60 leading-relaxed italic">
                   {">"} {description}
                 </p>
               )}
             </div>
             
             {menuItems && (
-              <div className="flex flex-col gap-4">
-                <span className="text-[8px] font-mono opacity-30 uppercase tracking-widest">Quick_Navigation</span>
-                <div className="flex flex-wrap gap-4">
+              <div className="flex flex-col gap-3 md:gap-4">
+                <span className="text-[7px] md:text-[8px] font-mono opacity-30 uppercase tracking-widest">Quick_Navigation</span>
+                <div className="flex flex-wrap gap-2 md:gap-4">
                   {menuItems.map((item, i) => (
                     <a 
                       key={i} 
                       href={item.href} 
-                      className="px-4 py-2 bg-black/5 border border-black/10 text-[9px] font-mono font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all"
+                      className="px-3 py-1.5 md:px-4 md:py-2 bg-black/5 border border-black/10 text-[8px] md:text-[9px] font-mono font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all"
                     >
                       {item.label}
                     </a>
@@ -260,47 +260,47 @@ const App: React.FC = () => {
             className={`px-12 transition-colors duration-1000 ${isCyberMode ? 'bg-[#050B24]' : ''}`}
             isScrollable={false}
           >
-            <div className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden">
+            <div className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden px-6">
               {/* Massive Background Title */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 overflow-hidden">
                 <motion.h1 
                   key={isCyberMode ? 'cyber-bg' : 'normal-bg'}
-                  className={`display-text text-[20vw] md:text-[25vw] tracking-tighter leading-none select-none whitespace-nowrap ${isCyberMode ? 'opacity-[0.1] text-cyan-400' : 'opacity-[0.03] text-black'}`}
+                  className={`display-text text-[30vw] md:text-[25vw] tracking-tighter leading-none select-none whitespace-nowrap ${isCyberMode ? 'opacity-[0.1] text-cyan-400' : 'opacity-[0.03] text-black'}`}
                   initial={{ x: -100, opacity: 0 }}
                   animate={{ x: 0, opacity: isCyberMode ? 0.1 : 0.03 }}
                   transition={{ duration: 2, ease: "easeOut" }}
                 >
-                  {isCyberMode ? 'CYBER_CORE' : 'XENON CORE'}
+                  {isCyberMode ? 'CYBER' : 'XENON'}
                 </motion.h1>
               </div>
 
               {/* Decorative elements */}
-              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] max-w-[1000px] max-h-[1000px] thin-circle pointer-events-none z-0 transition-all duration-1000 ${isCyberMode ? 'opacity-20 border-cyan-500/50' : 'opacity-10 border-black'}`} />
-              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] h-[40vw] pointer-events-none z-0 transition-all duration-1000 ${isCyberMode ? 'grainy-glow-cyan opacity-40' : 'grainy-glow-blue opacity-20'}`} />
+              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[90vw] md:w-[80vw] md:h-[80vw] max-w-[1000px] max-h-[1000px] thin-circle pointer-events-none z-0 transition-all duration-1000 ${isCyberMode ? 'opacity-20 border-cyan-500/50' : 'opacity-10 border-black'}`} />
+              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] md:w-[40vw] md:h-[40vw] pointer-events-none z-0 transition-all duration-1000 ${isCyberMode ? 'grainy-glow-cyan opacity-40' : 'grainy-glow-blue opacity-20'}`} />
               
-              {/* Corner Labels - Moved further out to avoid overlap with nav */}
-              <div className={`absolute top-32 left-0 flex flex-col z-30 transition-colors duration-1000 ${isCyberMode ? 'text-cyan-400' : 'text-black'}`}>
-                <span className="text-[10px] font-mono font-bold uppercase tracking-[0.5em] mb-1">{t.systemStatus}: {isCyberMode ? t.overdrive : t.optimal}</span>
-                <span className="text-[9px] font-mono opacity-40 uppercase tracking-[0.2em]">{isCyberMode ? t.vaporLink : t.neuralLink}</span>
+              {/* Corner Labels - Responsive positioning */}
+              <div className={`absolute top-24 md:top-32 left-6 md:left-12 flex flex-col z-30 transition-colors duration-1000 ${isCyberMode ? 'text-cyan-400' : 'text-black'}`}>
+                <span className="text-[8px] md:text-[10px] font-mono font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] mb-1">{t.systemStatus}: {isCyberMode ? t.overdrive : t.optimal}</span>
+                <span className="text-[7px] md:text-[9px] font-mono opacity-40 uppercase tracking-[0.2em]">{isCyberMode ? t.vaporLink : t.neuralLink}</span>
               </div>
               
-              <div className={`absolute top-32 right-0 z-30 text-right transition-colors duration-1000 ${isCyberMode ? 'text-cyan-400' : 'text-black'}`}>
-                <span className="micro-label">{isCyberMode ? t.module99 : t.module01}</span>
+              <div className={`absolute top-24 md:top-32 right-6 md:right-12 z-30 text-right transition-colors duration-1000 ${isCyberMode ? 'text-cyan-400' : 'text-black'}`}>
+                <span className="micro-label text-[7px] md:text-[8px]">{isCyberMode ? t.module99 : t.module01}</span>
               </div>
 
               {/* Central Content */}
-              <div className="relative z-20 flex flex-col items-center gap-12">
+              <div className="relative z-20 flex flex-col items-center gap-6 md:gap-12 w-full max-w-5xl">
                 <div className="relative group">
                   {/* Bubble Interaction Hint on Hover */}
                   <motion.div 
-                    className={`absolute -top-10 -right-10 z-40 p-3 rounded-full border transition-all duration-500 cursor-pointer flex items-center gap-2 opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 ${isCyberMode ? 'bg-cyan-500/20 border-cyan-400 text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.5)]' : 'bg-white border-black/10 text-black shadow-lg'}`}
+                    className={`absolute -top-6 -right-6 md:-top-10 md:-right-10 z-40 p-2 md:p-3 rounded-full border transition-all duration-500 cursor-pointer flex items-center gap-2 opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 ${isCyberMode ? 'bg-cyan-500/20 border-cyan-400 text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.5)]' : 'bg-white border-black/10 text-black shadow-lg'}`}
                     onClick={(e) => {
                       e.stopPropagation();
                       setIsCyberMode(!isCyberMode);
                     }}
                   >
-                    {isCyberMode ? <X size={16} /> : <Zap size={16} />}
-                    <span className="text-[8px] font-mono font-bold uppercase tracking-widest">{isCyberMode ? t.closeCore : t.burstBubble}</span>
+                    {isCyberMode ? <X size={14} /> : <Zap size={14} />}
+                    <span className="text-[7px] md:text-[8px] font-mono font-bold uppercase tracking-widest">{isCyberMode ? t.closeCore : t.burstBubble}</span>
                   </motion.div>
 
                   <motion.div 
@@ -313,7 +313,7 @@ const App: React.FC = () => {
                       scale: { duration: 10, repeat: Infinity, ease: "easeInOut" },
                       rotate: isCyberMode ? { duration: 20, repeat: Infinity, ease: "linear" } : { duration: 8, repeat: Infinity, ease: "easeInOut" }
                     }}
-                    className={`w-[406px] h-[406px] md:w-[550px] md:h-[550px] flex items-center justify-center relative shadow-2xl cursor-pointer transition-all duration-1000 ${isCyberMode ? 'bg-cyan-500/10 border border-cyan-400/30 backdrop-blur-xl rounded-2xl' : 'liquid-shape animate-liquid'}`}
+                    className={`w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] md:w-[500px] md:h-[500px] flex items-center justify-center relative shadow-2xl cursor-pointer transition-all duration-1000 ${isCyberMode ? 'bg-cyan-500/10 border border-cyan-400/30 backdrop-blur-xl rounded-2xl' : 'liquid-shape animate-liquid'}`}
                   >
                     <AnimatePresence mode="wait">
                       {!isCyberMode ? (
@@ -327,37 +327,37 @@ const App: React.FC = () => {
                           <span className="text-[18px] font-mono tracking-[0.8em] opacity-30 uppercase font-bold animate-pulse">the_core</span>
                         </motion.div>
                       ) : (
-                        <motion.div 
-                          key="cyber-core"
-                          initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
-                          animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                          exit={{ opacity: 0, scale: 1.5 }}
-                          className="relative w-64 h-64 md:w-[450px] md:h-[450px] flex items-center justify-center"
-                        >
-                          {/* Cyber Token / Cube Visual */}
-                          <div className="absolute inset-0 border-2 border-cyan-400/50 rounded-lg shadow-[0_0_30px_rgba(34,211,238,0.3)] animate-pulse" />
-                          <div className="absolute inset-4 border border-fuchsia-500/30 rounded-lg" />
-                          <div className="text-cyan-400 font-mono text-xl md:text-3xl tracking-[0.2em] font-bold uppercase">AI_CORE</div>
-                          
-                          {/* Arrows and Labels */}
-                          {[
-                            { label: 'DATA SCIENCE', angle: -45, x: -180, y: -180 },
-                            { label: 'DATA ANALYSIS', angle: 45, x: 180, y: -180 },
-                            { label: 'AI ENGINEER', angle: 135, x: 180, y: 180 },
-                            { label: 'ML ENGINEER', angle: 225, x: -180, y: 180 }
-                          ].map((item, i) => (
-                            <motion.div
-                              key={i}
-                              className="absolute flex flex-col items-center gap-2"
-                              initial={{ opacity: 0, x: 0, y: 0 }}
-                              animate={{ opacity: 1, x: item.x, y: item.y }}
-                              transition={{ delay: 0.5 + i * 0.1 }}
-                            >
-                              <div className="w-12 h-[1px] bg-cyan-400/50" style={{ transform: `rotate(${item.angle}deg)` }} />
-                              <span className="text-[10px] font-mono text-cyan-400/80 tracking-widest whitespace-nowrap bg-black/40 px-2 py-1 rounded border border-cyan-400/20">{item.label}</span>
-                            </motion.div>
-                          ))}
-                        </motion.div>
+                  <motion.div 
+                    key="cyber-core"
+                    initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
+                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                    exit={{ opacity: 0, scale: 1.5 }}
+                    className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-[450px] md:h-[450px] flex items-center justify-center"
+                  >
+                    {/* Cyber Token / Cube Visual */}
+                    <div className="absolute inset-0 border-2 border-cyan-400/50 rounded-lg shadow-[0_0_30px_rgba(34,211,238,0.3)] animate-pulse" />
+                    <div className="absolute inset-4 border border-fuchsia-500/30 rounded-lg" />
+                    <div className="text-cyan-400 font-mono text-lg md:text-3xl tracking-[0.2em] font-bold uppercase">AI_CORE</div>
+                    
+                    {/* Arrows and Labels - Hidden on small mobile */}
+                    {[
+                      { label: 'DATA SCIENCE', angle: -45, x: -180, y: -180 },
+                      { label: 'DATA ANALYSIS', angle: 45, x: 180, y: -180 },
+                      { label: 'AI ENGINEER', angle: 135, x: 180, y: 180 },
+                      { label: 'ML ENGINEER', angle: 225, x: -180, y: 180 }
+                    ].map((item, i) => (
+                      <motion.div
+                        key={i}
+                        className="absolute hidden md:flex flex-col items-center gap-2"
+                        initial={{ opacity: 0, x: 0, y: 0 }}
+                        animate={{ opacity: 1, x: item.x, y: item.y }}
+                        transition={{ delay: 0.5 + i * 0.1 }}
+                      >
+                        <div className="w-12 h-[1px] bg-cyan-400/50" style={{ transform: `rotate(${item.angle}deg)` }} />
+                        <span className="text-[10px] font-mono text-cyan-400/80 tracking-widest whitespace-nowrap bg-black/40 px-2 py-1 rounded border border-cyan-400/20">{item.label}</span>
+                      </motion.div>
+                    ))}
+                  </motion.div>
                       )}
                     </AnimatePresence>
                     
@@ -392,7 +392,7 @@ const App: React.FC = () => {
                 <div className="text-center space-y-6">
                   <motion.h2 
                     key={isCyberMode ? 'cyber-title' : 'normal-title'}
-                    className={`display-text text-6xl md:text-9xl tracking-tight leading-none transition-colors duration-1000 ${isCyberMode ? 'text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]' : 'text-black'}`}
+                    className={`display-text text-4xl sm:text-6xl md:text-9xl tracking-tight leading-none transition-colors duration-1000 ${isCyberMode ? 'text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]' : 'text-black'}`}
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
@@ -649,7 +649,7 @@ const App: React.FC = () => {
       </div>
 
       {/* Split Navigation - Integrated HUD Style */}
-      <nav className="fixed top-0 left-0 w-full z-[100] px-12 py-10 flex justify-between items-start pointer-events-none font-mono">
+      <nav className="fixed top-0 left-0 w-full z-[100] px-6 py-6 md:px-12 md:py-10 flex justify-between items-start pointer-events-none font-mono">
         {/* Left Side: Logo & Status */}
         <motion.div 
           className="pointer-events-auto cursor-pointer flex flex-col gap-4"
@@ -657,29 +657,29 @@ const App: React.FC = () => {
           onClick={() => setActiveSection('home')}
         >
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 border border-black/20 flex items-center justify-center font-bold text-xl relative">
+            <div className="w-10 h-10 md:w-12 md:h-12 border border-black/20 flex items-center justify-center font-bold text-lg md:text-xl relative">
               <div className="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-black" />
               <div className="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-black" />
               MO
             </div>
             <div className="flex flex-col">
-              <span className="text-[11px] font-bold tracking-[0.4em] uppercase">Mouna_Ouattara</span>
+              <span className="text-[10px] md:text-[11px] font-bold tracking-[0.4em] uppercase">Mouna_Ouattara</span>
               <div className="flex items-center gap-2">
                 <div className="w-1.5 h-1.5 bg-black rounded-full animate-pulse" />
-                <span className="text-[8px] opacity-40 tracking-[0.2em]">DATA_ANALYST // AI_ENGINEER // V4.0</span>
+                <span className="text-[7px] md:text-[8px] opacity-40 tracking-[0.2em] hidden sm:inline">DATA_ANALYST // AI_ENGINEER // V4.0</span>
               </div>
             </div>
           </div>
         </motion.div>
 
         {/* Right Side: Navigation Links */}
-        <div className="pointer-events-auto flex flex-col items-end gap-6">
-          <div className="flex items-center gap-10">
+        <div className="pointer-events-auto flex flex-col items-end gap-4 md:gap-6">
+          <div className="flex items-center gap-4 md:gap-10 overflow-x-auto max-w-[60vw] sm:max-w-none no-scrollbar">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveSection(tab.id)}
-                className={`text-[10px] font-bold uppercase tracking-[0.4em] transition-all duration-500 relative py-2 group ${
+                className={`text-[9px] md:text-[10px] font-bold uppercase tracking-[0.3em] md:tracking-[0.4em] transition-all duration-500 relative py-2 group whitespace-nowrap ${
                   activeSection === tab.id ? 'text-black' : 'text-black/30 hover:text-black/60'
                 }`}
               >
@@ -694,7 +694,7 @@ const App: React.FC = () => {
               </button>
             ))}
           </div>
-          <div className="flex items-center gap-4 opacity-20">
+          <div className="hidden md:flex items-center gap-4 opacity-20">
             <div className="h-[1px] w-24 bg-black" />
             <span className="text-[9px] tracking-[0.5em]">{t.navInterface}</span>
           </div>
