@@ -140,19 +140,19 @@ const ProjectsSection: React.FC<{ lang: 'fr' | 'en' }> = ({ lang }) => {
            style={{ backgroundImage: 'linear-gradient(var(--fg) 1px, transparent 1px), linear-gradient(90deg, var(--fg) 1px, transparent 1px)', backgroundSize: '100px 100px' }} />
       
       {/* Decorative Robotic Trees Forest - PROGRESSIVE CASCADE */}
-      {/* Top Layer - Near Selected Works */}
-      <div className="absolute -left-40 -top-40 opacity-10 pointer-events-none hidden xl:block">
-        <RoboticTree height={800} color="black" delay={0.2} scale={1.1} />
+      {/* Top Layer - Starting from Section Title area */}
+      <div className="absolute -left-40 -top-80 opacity-10 pointer-events-none hidden xl:block">
+        <RoboticTree height={1000} color="black" delay={0.2} scale={1.2} />
       </div>
-      <div className="absolute -right-40 -top-20 opacity-10 pointer-events-none hidden xl:block">
-        <RoboticTree height={700} color="black" delay={0.4} scale={1.0} />
+      <div className="absolute -right-40 -top-60 opacity-10 pointer-events-none hidden xl:block">
+        <RoboticTree height={900} color="black" delay={0.4} scale={1.1} />
       </div>
 
       {/* Mid Layer - Transitioning to Digital Laboratory */}
-      <div className="absolute -left-60 top-[10%] opacity-15 pointer-events-none hidden xl:block">
+      <div className="absolute -left-60 top-[5%] opacity-15 pointer-events-none hidden xl:block">
         <RoboticTree height={1200} color="black" delay={0.8} scale={1.4} />
       </div>
-      <div className="absolute -right-60 top-[20%] opacity-15 pointer-events-none hidden xl:block">
+      <div className="absolute -right-60 top-[15%] opacity-15 pointer-events-none hidden xl:block">
         <RoboticTree height={1000} color="black" delay={1.1} scale={1.3} />
       </div>
 

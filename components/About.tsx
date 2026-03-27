@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { Target, Zap, Award } from 'lucide-react';
 
 const AboutHero: React.FC<{ lang: 'fr' | 'en' }> = ({ lang }) => (
-  <section className="relative flex items-center pt-16 md:pt-24 px-6 md:px-10 overflow-hidden bg-transparent">
+  <section className="relative flex items-center pt-4 md:pt-8 px-6 md:px-10 overflow-hidden bg-transparent">
     {/* Overlapping Rings (Image 3) */}
     <div className="absolute top-0 right-0 w-[400px] h-[400px] md:w-[800px] md:h-[800px] opacity-10 pointer-events-none">
       <div className="ring-glow w-full h-full" />
@@ -100,8 +100,8 @@ const About: React.FC<{ lang: 'fr' | 'en' }> = ({ lang }) => {
     >
       <AboutHero lang={lang} />
       
-      <div className="max-w-7xl mx-auto px-6 mt-4 md:mt-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-12 md:mb-20">
+      <div className="max-w-7xl mx-auto px-6 mt-2 md:mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
           {[
             { 
               icon: <Target className="w-5 h-5 md:w-6 md:h-6" />, 

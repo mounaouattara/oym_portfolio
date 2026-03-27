@@ -4,9 +4,9 @@ import { TIMELINE_DATA } from '../constants';
 
 const Timeline: React.FC = () => {
   return (
-    <div className="py-24 md:py-48 w-full flex flex-col items-center max-w-7xl mx-auto px-6 md:px-10 bg-transparent relative overflow-hidden">
-      <div className="mb-16 md:mb-32 w-full text-center">
-        <div className="flex items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
+    <div className="py-12 md:py-20 w-full flex flex-col items-center max-w-7xl mx-auto px-6 md:px-10 bg-transparent relative overflow-hidden">
+      <div className="mb-8 md:mb-16 w-full text-center">
+        <div className="flex items-center justify-center gap-4 md:gap-6 mb-4 md:mb-8">
           <div className="h-[1px] w-12 md:w-24 bg-black/20" />
           <span className="text-black font-mono text-[9px] md:text-[10px] font-bold tracking-[0.4em] md:tracking-[0.6em] uppercase">Temporal_Sequence</span>
           <div className="h-[1px] w-12 md:w-24 bg-black/20" />

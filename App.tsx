@@ -78,9 +78,9 @@ const PageLayout: React.FC<{
       <div className="flex md:flex-col items-center gap-3 md:gap-8">
         <span className="text-lg md:text-4xl font-bold font-mono opacity-10">{number}</span>
         <div className="hidden md:block h-32 w-[1px] bg-black/10" />
-        <div className="md:writing-vertical-rl flex md:flex-col gap-1.5 md:gap-4 items-center [text-orientation:upright]">
-          <span className="micro-label whitespace-nowrap text-[7px] md:text-[10px] tracking-normal">{label}</span>
-          <h2 className="display-text text-xs md:text-2xl whitespace-nowrap tracking-normal">{title}</h2>
+        <div className="md:writing-vertical-rl flex md:flex-row gap-1.5 md:gap-4 items-center">
+          <span className="micro-label whitespace-nowrap text-[7px] md:text-[10px]">{label}</span>
+          <h2 className="display-text text-xs md:text-2xl whitespace-nowrap">{title}</h2>
         </div>
       </div>
       <div className="md:hidden flex flex-col items-end">
@@ -93,7 +93,7 @@ const PageLayout: React.FC<{
     <div className="flex-1 px-4 md:px-12 lg:px-20 py-4 md:py-12">
       {/* Page Introduction & Mini-Menu (At a glance) */}
       {(description || menuItems) && (
-        <div className="mb-8 md:mb-20 border-b border-black/10 pb-6 md:pb-12">
+        <div className="mb-4 md:mb-8 border-b border-black/10 pb-4 md:pb-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-12">
             <div className="max-w-2xl">
               <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-6">
@@ -541,7 +541,7 @@ const App: React.FC = () => {
               ]}
             >
               <About lang={lang} />
-              <div id="timeline-section" className="mt-4 md:mt-8 scroll-mt-32">
+              <div id="timeline-section" className="mt-2 md:mt-4 scroll-mt-32">
                 <Timeline />
               </div>
             </PageLayout>
