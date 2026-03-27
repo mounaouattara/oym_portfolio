@@ -31,7 +31,7 @@ const Timeline: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-16 md:gap-32 relative z-20">
+        <div className="flex flex-col gap-12 md:gap-24 relative z-20">
           {TIMELINE_DATA.map((event, idx) => (
             <motion.div
               key={idx}
@@ -39,32 +39,31 @@ const Timeline: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1, delay: idx * 0.1 }}
-              className={`flex items-center w-full flex-row md:${event.side === 'left' ? 'flex-row-reverse' : 'flex-row'}`}
+              className={`relative flex items-center justify-center w-full ${idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
             >
               {/* Content Side */}
-              <div className={`w-full md:w-1/2 pl-20 md:pl-0 ${event.side === 'left' ? 'md:pr-24 md:text-right' : 'md:pl-24 md:text-left'}`}>
-                <div className="flex flex-col gap-2">
-                  <span className="text-black font-mono text-[9px] md:text-[10px] font-bold tracking-widest uppercase opacity-60">
+              <div className={`w-full md:w-1/2 pl-20 md:pl-0 ${idx % 2 === 0 ? 'md:pr-20 md:text-right' : 'md:pl-20 md:text-left'}`}>
+                <div className={`flex flex-col gap-2 ${idx % 2 === 0 ? 'md:items-end' : 'md:items-start'}`}>
+                  <span className="text-black font-mono text-[10px] md:text-[12px] font-bold tracking-widest uppercase opacity-80">
                     {event.title}
                   </span>
-                  <p className="text-xs md:text-sm text-fg/60 font-mono leading-relaxed max-w-xs inline-block">
+                  <p className={`text-xs md:text-sm text-fg/70 font-mono leading-relaxed max-w-xs ${idx % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
                     {event.description}
                   </p>
                 </div>
               </div>
 
               {/* Center Circle */}
-              <div className="absolute left-0 md:relative md:left-auto flex items-center justify-center">
+              <div className="absolute left-0 md:relative md:left-auto flex items-center justify-center z-30">
                 <motion.div 
-                  whileHover={{ scale: 1.2, zIndex: 30 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="w-16 h-16 md:w-24 md:h-24 rounded-full border border-black/30 bg-transparent flex items-center justify-center group hover:border-black transition-colors duration-500 cursor-pointer"
+                  whileHover={{ scale: 1.1, zIndex: 40 }}
+                  className="w-16 h-16 md:w-24 md:h-24 rounded-full border border-black/30 bg-white/80 backdrop-blur-sm flex items-center justify-center group hover:border-black transition-all duration-500 cursor-pointer shadow-xl"
                 >
                   <span className="text-sm md:text-lg font-mono font-bold text-fg group-hover:text-black transition-colors">
                     {event.year}
                   </span>
                   {/* Decorative Orbits */}
-                  <div className="absolute inset-0 rounded-full border border-dashed border-black/10 animate-spin-slow opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute inset-0 rounded-full border border-dashed border-black/20 animate-spin-slow opacity-0 group-hover:opacity-100 transition-opacity" />
                 </motion.div>
               </div>
 

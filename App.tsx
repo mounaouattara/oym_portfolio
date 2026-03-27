@@ -21,20 +21,29 @@ const SectionWrapper: React.FC<{
   className?: string;
   showDynamicBg?: boolean;
   isScrollable?: boolean;
-}> = ({ id, children, variants, transition, className, showDynamicBg = false, isScrollable = true }) => {
+  bgColors?: string[];
+}> = ({ id, children, variants, transition, className, showDynamicBg = false, isScrollable = true, bgColors }) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     container: containerRef,
-    offset: ["start start", "end end"]
+  });
+
+  // More vibrant and distinct colors for the transition - Earthy to Deep
+  const defaultColors = ["#FFFFFF", "#E8D1A7", "#9D9167", "#84592B", "#743014", "#442D1C"];
+  const colors = bgColors || defaultColors;
+  
+  // Very aggressive steps to ensure the transition is visible almost immediately
+  const steps = colors.map((_, i) => {
+    if (i === 0) return 0;
+    if (i === 1) return 0.02; // Start transition almost immediately
+    return 0.02 + (i - 1) * (0.98 / (colors.length - 2));
   });
 
   const bgColor = useTransform(
     scrollYProgress,
-    [0, 0.25, 0.5, 0.75, 1],
-    ["#E8D1A7", "#9D9167", "#84592B", "#743014", "#442D1C"]
+    steps,
+    colors
   );
-
-  const springBg = useSpring(bgColor, { stiffness: 50, damping: 20 });
 
   return (
     <motion.section
@@ -44,14 +53,9 @@ const SectionWrapper: React.FC<{
       exit="exit"
       variants={variants}
       transition={transition}
+      style={{ backgroundColor: showDynamicBg ? bgColor : 'transparent' }}
       className={`h-screen w-full relative z-10 ${className}`}
     >
-      {showDynamicBg && (
-        <motion.div 
-          className="absolute inset-0 z-[-1] pointer-events-none"
-          style={{ backgroundColor: springBg }}
-        />
-      )}
       <div 
         ref={containerRef}
         className={`relative z-10 h-full w-full ${isScrollable ? 'overflow-y-auto' : 'overflow-hidden'} flex flex-col`}
@@ -74,18 +78,24 @@ const PageLayout: React.FC<{
 }> = ({ number, label, title, subLabel1, subLabel2, description, menuItems, children }) => (
     <div className="flex flex-col md:flex-row w-full min-h-full">
     {/* Sidebar - Vertical on Desktop, Horizontal on Mobile */}
-    <div className="w-full md:w-32 border-b md:border-b-0 md:border-r border-black/10 flex md:flex-col items-center justify-between md:justify-start py-4 md:py-32 px-4 md:px-0 md:sticky md:top-0 md:h-screen bg-bg/50 backdrop-blur-sm md:bg-transparent z-40">
-      <div className="flex md:flex-col items-center gap-3 md:gap-8">
-        <span className="text-lg md:text-4xl font-bold font-mono opacity-10">{number}</span>
-        <div className="hidden md:block h-32 w-[1px] bg-black/10" />
-        <div className="md:writing-vertical-rl flex md:flex-row gap-1.5 md:gap-4 items-center">
-          <span className="micro-label whitespace-nowrap text-[7px] md:text-[10px]">{label}</span>
-          <h2 className="display-text text-xs md:text-2xl whitespace-nowrap">{title}</h2>
+    <div className="w-full md:w-32 border-b md:border-b-0 md:border-r border-black/5 flex md:flex-col items-center justify-between md:justify-start py-4 md:py-32 px-6 md:px-0 sticky top-0 md:h-screen bg-white/5 backdrop-blur-sm md:bg-transparent z-40">
+      <div className="flex md:flex-col items-center gap-4 md:gap-8">
+        <div className="flex flex-col items-center">
+          <span className="text-xl md:text-4xl font-bold font-mono opacity-20 leading-none">{number}</span>
+          <div className="md:hidden w-6 h-[1px] bg-black/10 mt-1" />
+        </div>
+        <div className="hidden md:block h-32 w-[1px] bg-black/5" />
+        <div className="md:[writing-mode:vertical-rl] md:writing-vertical-rl flex md:flex-row gap-3 md:gap-4 items-center">
+          <span className="micro-label whitespace-nowrap text-[9px] md:text-[10px] opacity-60 font-bold tracking-widest">{label}</span>
+          <h2 className="display-text text-base md:text-2xl whitespace-nowrap font-bold tracking-tighter">{title}</h2>
         </div>
       </div>
-      <div className="md:hidden flex flex-col items-end">
-        <span className="text-[6px] font-mono opacity-40 uppercase tracking-widest">{subLabel1}</span>
-        <span className="text-[6px] font-mono opacity-20 uppercase tracking-widest">{subLabel2}</span>
+      <div className="md:hidden flex flex-col items-end gap-1">
+        <div className="flex items-center gap-2">
+          <div className="w-1.5 h-1.5 bg-black rounded-full animate-pulse" />
+          <span className="text-[8px] font-mono font-bold opacity-80 uppercase tracking-widest">{subLabel1}</span>
+        </div>
+        <span className="text-[7px] font-mono opacity-40 uppercase tracking-widest pl-3">{subLabel2}</span>
       </div>
     </div>
     
@@ -290,7 +300,7 @@ const App: React.FC = () => {
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 overflow-hidden">
                 <motion.h1 
                   key={isCyberMode ? 'cyber-bg' : 'normal-bg'}
-                  className={`display-text text-[35vw] md:text-[25vw] tracking-tighter leading-none select-none whitespace-nowrap ${isCyberMode ? 'opacity-[0.1] text-cyan-400' : 'opacity-[0.03] text-black'}`}
+                  className={`display-text text-[25vw] md:text-[25vw] tracking-tighter leading-none select-none whitespace-nowrap ${isCyberMode ? 'opacity-[0.1] text-cyan-400' : 'opacity-[0.03] text-black'}`}
                   initial={{ x: -100, opacity: 0 }}
                   animate={{ x: 0, opacity: isCyberMode ? 0.1 : 0.03 }}
                   transition={{ duration: 2, ease: "easeOut" }}
@@ -304,14 +314,14 @@ const App: React.FC = () => {
               <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] md:w-[40vw] md:h-[40vw] pointer-events-none z-0 transition-all duration-1000 ${isCyberMode ? 'grainy-glow-cyan opacity-40' : 'grainy-glow-blue opacity-20'}`} />
               
               {/* Corner Labels - Responsive positioning */}
-              <div className={`absolute top-12 md:top-24 left-4 md:left-8 flex flex-col z-30 transition-colors duration-1000 ${isCyberMode ? 'text-cyan-400' : 'text-black'}`}>
-                <span className="text-[5px] md:text-[8px] font-mono font-bold uppercase tracking-[0.2em] md:tracking-[0.5em] mb-1">SYSTEM_STATUS: {isCyberMode ? 'OVERDRIVE' : 'OPTIMAL'}</span>
-                <span className="text-[4px] md:text-[7px] font-mono opacity-40 uppercase tracking-[0.1em] md:tracking-[0.2em]">{isCyberMode ? 'VAPOR_LINK_ACTIVE' : 'NEURAL_LINK_ESTABLISHED'}</span>
-              </div>
-              
-              <div className={`absolute top-12 md:top-24 right-4 md:right-8 z-30 text-right transition-colors duration-1000 ${isCyberMode ? 'text-cyan-400' : 'text-black'}`}>
-                <span className="micro-label text-[4px] md:text-[6px]">{isCyberMode ? 'MODULE_99' : 'MODULE_01'}</span>
-              </div>
+                  <div className={`absolute top-[25vw] md:top-24 left-4 md:left-8 flex flex-col z-30 transition-colors duration-1000 ${isCyberMode ? 'text-cyan-400' : 'text-black'}`}>
+                    <span className="text-[5px] md:text-[8px] font-mono font-bold uppercase tracking-[0.2em] md:tracking-[0.5em] mb-1">SYSTEM_STATUS: {isCyberMode ? 'OVERDRIVE' : 'OPTIMAL'}</span>
+                    <span className="text-[4px] md:text-[7px] font-mono opacity-40 uppercase tracking-[0.1em] md:tracking-[0.2em]">{isCyberMode ? 'VAPOR_LINK_ACTIVE' : 'NEURAL_LINK_ESTABLISHED'}</span>
+                  </div>
+                  
+                  <div className={`absolute top-[25vw] md:top-24 right-4 md:right-8 z-30 text-right transition-colors duration-1000 ${isCyberMode ? 'text-cyan-400' : 'text-black'}`}>
+                    <span className="micro-label text-[4px] md:text-[6px]">{isCyberMode ? 'MODULE_99' : 'MODULE_01'}</span>
+                  </div>
 
               {/* Central Content */}
               <div className="relative z-20 flex flex-col items-center gap-2 md:gap-8 w-full max-w-5xl">
@@ -337,7 +347,7 @@ const App: React.FC = () => {
                           exit={{ opacity: 0 }}
                           className="absolute inset-0 flex flex-col items-center justify-center"
                         >
-                          <span className="text-[18px] font-mono tracking-[0.8em] opacity-30 uppercase font-bold animate-pulse">the_core</span>
+                          <span className="text-[12px] md:text-[18px] font-mono tracking-[0.8em] opacity-30 uppercase font-bold animate-pulse">the_core</span>
                           
                           {/* Hint inside the core */}
                           <AnimatePresence>
@@ -497,7 +507,7 @@ const App: React.FC = () => {
             id="projects"
             variants={variants}
             transition={transition}
-            showDynamicBg={true}
+            showDynamicBg={false}
             className="px-0"
           >
             <PageLayout
@@ -526,6 +536,7 @@ const App: React.FC = () => {
             transition={transition}
             showDynamicBg={true}
             className="px-0"
+            bgColors={["#FFFFFF", "#E8D1A7", "#9D9167", "#84592B", "#743014", "#442D1C"]}
           >
             <PageLayout
               number="03"
@@ -541,7 +552,7 @@ const App: React.FC = () => {
               ]}
             >
               <About lang={lang} />
-              <div id="timeline-section" className="mt-2 md:mt-4 scroll-mt-32">
+              <div id="timeline-section" className="mt-12 md:mt-24 scroll-mt-32 pb-[100vh]">
                 <Timeline />
               </div>
             </PageLayout>
@@ -553,7 +564,7 @@ const App: React.FC = () => {
             id="skills"
             variants={variants}
             transition={transition}
-            showDynamicBg={true}
+            showDynamicBg={false}
             className="px-0"
           >
             <PageLayout
@@ -579,7 +590,7 @@ const App: React.FC = () => {
             id="passion"
             variants={variants}
             transition={transition}
-            showDynamicBg={true}
+            showDynamicBg={false}
             className="px-0"
           >
             <PageLayout
@@ -634,7 +645,7 @@ const App: React.FC = () => {
             id="contact"
             variants={variants}
             transition={transition}
-            showDynamicBg={true}
+            showDynamicBg={false}
             className="px-0"
           >
             <PageLayout
@@ -666,27 +677,27 @@ const App: React.FC = () => {
     <div className="relative min-h-screen text-fg selection:bg-accent selection:text-bg overflow-hidden font-sans">
       {/* Dynamic Background Color */}
       <motion.div 
-        className="fixed inset-0 -z-10 bg-[#F2F2F2]"
+        className="fixed inset-0 -z-10 bg-white"
       />
       
       <div className="grid-bg" />
       
       {/* HUD Elements */}
       <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-50">
-        <div className="absolute top-6 left-6 md:top-10 md:left-10 hud-corner border-r-0 border-b-0" />
-        <div className="absolute top-6 right-6 md:top-10 md:right-10 hud-corner border-l-0 border-b-0" />
-        <div className="absolute bottom-6 left-6 md:bottom-10 md:left-10 hud-corner border-r-0 border-t-0" />
-        <div className="absolute bottom-6 right-6 md:bottom-10 md:right-10 hud-corner border-l-0 border-t-0" />
+        <div className="absolute top-4 left-4 md:top-10 md:left-10 hud-corner border-r-0 border-b-0 opacity-20 md:opacity-100" />
+        <div className="absolute top-4 right-4 md:top-10 md:right-10 hud-corner border-l-0 border-b-0 opacity-20 md:opacity-100" />
+        <div className="absolute bottom-4 left-4 md:bottom-10 md:left-10 hud-corner border-r-0 border-t-0 opacity-20 md:opacity-100" />
+        <div className="absolute bottom-4 right-4 md:bottom-10 md:right-10 hud-corner border-l-0 border-t-0 opacity-20 md:opacity-100" />
         
-        <div className="absolute top-1/2 left-6 md:left-10 h-16 md:h-32 w-[1px] bg-black/10 -translate-y-1/2" />
-        <div className="absolute top-1/2 right-6 md:right-10 h-16 md:h-32 w-[1px] bg-black/10 -translate-y-1/2" />
+        <div className="absolute top-1/2 left-4 md:left-10 h-12 md:h-32 w-[1px] bg-black/5 md:bg-black/10 -translate-y-1/2" />
+        <div className="absolute top-1/2 right-4 md:right-10 h-12 md:h-32 w-[1px] bg-black/5 md:bg-black/10 -translate-y-1/2" />
         
-        <div className="absolute top-10 left-1/2 w-32 h-[1px] bg-black/10 -translate-x-1/2" />
-        <div className="absolute bottom-10 left-1/2 w-32 h-[1px] bg-black/10 -translate-x-1/2" />
+        <div className="absolute top-8 md:top-10 left-1/2 w-24 md:w-32 h-[1px] bg-black/5 md:bg-black/10 -translate-x-1/2" />
+        <div className="absolute bottom-8 md:bottom-10 left-1/2 w-24 md:w-32 h-[1px] bg-black/5 md:bg-black/10 -translate-x-1/2" />
       </div>
 
       {/* Split Navigation - Integrated HUD Style */}
-      <nav className="fixed top-0 left-0 w-full z-[100] px-3 py-3 md:px-12 md:py-10 flex justify-between items-start pointer-events-none font-mono">
+      <nav className="fixed top-0 left-0 w-full z-[100] px-6 py-6 md:px-12 md:py-10 flex justify-between items-start pointer-events-none font-mono">
         {/* Left Side: Logo & Status */}
         <motion.div 
           className="pointer-events-auto cursor-pointer flex flex-col gap-2 md:gap-4"

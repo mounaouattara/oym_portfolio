@@ -187,7 +187,7 @@ body {
 
 /* Vertical Text */
 .writing-vertical-rl {
-  writing-mode: vertical-rl;
+  writing-mode: vertical-rl !important;
 }
 
 .vertical-text {

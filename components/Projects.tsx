@@ -129,7 +129,7 @@ const ProjectsSection: React.FC<{ lang: 'fr' | 'en' }> = ({ lang }) => {
   }, [activeCategory]);
 
   return (
-    <div className="w-full flex flex-col items-center max-w-7xl mx-auto px-6 md:px-10 bg-transparent relative overflow-hidden">
+    <div className="w-full flex flex-col items-center max-w-7xl mx-auto px-6 md:px-10 bg-transparent relative">
       {/* Navigation Anchors at the very top */}
       <div className="absolute -top-32 left-0 w-0 h-0 invisible" id="vision" />
       <div className="absolute -top-32 left-0 w-0 h-0 invisible" id="nlp" />
@@ -141,10 +141,10 @@ const ProjectsSection: React.FC<{ lang: 'fr' | 'en' }> = ({ lang }) => {
       
       {/* Decorative Robotic Trees Forest - PROGRESSIVE CASCADE */}
       {/* Top Layer - Starting from Section Title area */}
-      <div className="absolute -left-40 -top-80 opacity-10 pointer-events-none hidden xl:block">
+      <div className="absolute -left-40 -top-[450px] opacity-10 pointer-events-none hidden xl:block">
         <RoboticTree height={1000} color="black" delay={0.2} scale={1.2} />
       </div>
-      <div className="absolute -right-40 -top-60 opacity-10 pointer-events-none hidden xl:block">
+      <div className="absolute -right-40 -top-[400px] opacity-10 pointer-events-none hidden xl:block">
         <RoboticTree height={900} color="black" delay={0.4} scale={1.1} />
       </div>
 
