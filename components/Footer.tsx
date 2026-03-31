@@ -40,8 +40,6 @@ const Footer: React.FC = () => {
 
       <div className="mt-32 flex justify-center">
         <div className="px-12 py-6 border border-black/10 text-black/40 font-mono text-[10px] uppercase tracking-[0.6em] hover:text-black/60 hover:border-black/30 transition-all duration-700 relative group">
-          <div className="hud-corner hud-corner-tl opacity-0 group-hover:opacity-100 transition-opacity" />
-          <div className="hud-corner hud-corner-br opacity-0 group-hover:opacity-100 transition-opacity" />
           DESIGNED_WITH_PRECISION_V2.4
         </div>
       </div>

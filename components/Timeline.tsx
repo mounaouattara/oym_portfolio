@@ -22,16 +22,16 @@ const Timeline: React.FC = () => {
 
         {/* Central Core Visual (Mechanical/Neural) */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none opacity-10 md:opacity-20 overflow-hidden">
-          <div className="w-64 h-64 md:w-96 md:h-96 rounded-full border border-black/30 flex items-center justify-center animate-spin-slow">
-            <div className="w-48 h-48 md:w-80 md:h-80 rounded-full border border-dashed border-black/20 flex items-center justify-center animate-reverse-spin">
-              <div className="w-32 h-32 md:w-64 md:h-64 rounded-full border border-black/10 flex items-center justify-center">
-                 <div className="w-16 h-16 md:w-32 md:h-32 bg-black/5 rounded-full blur-2xl md:blur-3xl animate-pulse" />
+          <div className="w-64 h-64 md:w-96 md:h-96 rounded-[0.3px] border border-black/30 flex items-center justify-center animate-spin-slow">
+            <div className="w-48 h-48 md:w-80 md:h-80 rounded-[0.3px] border border-dashed border-black/20 flex items-center justify-center animate-reverse-spin">
+              <div className="w-32 h-32 md:w-64 md:h-64 rounded-[0.3px] border border-black/10 flex items-center justify-center">
+                 <div className="w-16 h-16 md:w-32 md:h-32 bg-black/5 rounded-[0.3px] blur-2xl md:blur-3xl animate-pulse" />
               </div>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-12 md:gap-24 relative z-20">
+        <div className="flex flex-col gap-20 md:gap-32 relative z-20">
           {TIMELINE_DATA.map((event, idx) => (
             <motion.div
               key={idx}
@@ -57,13 +57,13 @@ const Timeline: React.FC = () => {
               <div className="absolute left-0 md:relative md:left-auto flex items-center justify-center z-30">
                 <motion.div 
                   whileHover={{ scale: 1.1, zIndex: 40 }}
-                  className="w-16 h-16 md:w-24 md:h-24 rounded-full border border-black/30 bg-white/80 backdrop-blur-sm flex items-center justify-center group hover:border-black transition-all duration-500 cursor-pointer shadow-xl"
+                  className="w-16 h-16 md:w-24 md:h-24 rounded-[0.3px] border border-black/30 bg-white/80 backdrop-blur-sm flex items-center justify-center group hover:border-black transition-all duration-500 cursor-pointer shadow-xl"
                 >
                   <span className="text-sm md:text-lg font-mono font-bold text-fg group-hover:text-black transition-colors">
                     {event.year}
                   </span>
                   {/* Decorative Orbits */}
-                  <div className="absolute inset-0 rounded-full border border-dashed border-black/20 animate-spin-slow opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute inset-0 rounded-[0.3px] border border-dashed border-black/20 animate-spin-slow opacity-0 group-hover:opacity-100 transition-opacity" />
                 </motion.div>
               </div>
 

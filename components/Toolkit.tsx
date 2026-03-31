@@ -49,18 +49,12 @@ const ToolkitSection: React.FC = () => {
                   </div>
                   
                   {/* Decorative Circle */}
-                  <div className="absolute inset-0 border border-accent/10 rounded-full group-hover:border-accent/40 transition-all duration-700" />
+                  <div className="absolute inset-0 border border-accent/10 rounded-[0.3px] group-hover:border-accent/40 transition-all duration-700" />
                   <motion.div 
                     animate={{ rotate: 360 }}
                     transition={{ duration: 10 + toolIdx * 2, repeat: Infinity, ease: "linear" }}
-                    className="absolute inset-[-10px] border-t border-accent/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    className="absolute inset-[-10px] border-t border-accent/20 rounded-[0.3px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   />
-                  
-                  {/* HUD Corners for the node */}
-                  <div className="absolute -inset-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="hud-corner hud-corner-tl !w-2 !h-2" />
-                    <div className="hud-corner hud-corner-br !w-2 !h-2" />
-                  </div>
                 </motion.div>
               ))}
             </div>

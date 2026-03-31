@@ -40,7 +40,7 @@ const ScrollProgress: React.FC<ScrollProgressProps> = ({ containerRef, label }) 
           <span className="text-[9px] font-mono text-sand/60 uppercase tracking-[0.3em]">
             {label}
           </span>
-          <div className="w-32 h-1 bg-white/5 rounded-full overflow-hidden">
+          <div className="w-32 h-1 bg-white/5 rounded-[0.3px] overflow-hidden">
             <motion.div 
               className="h-full bg-sand shadow-[0_0_10px_rgba(232,209,167,0.5)]"
               style={{ scaleX, transformOrigin: "0%" }}

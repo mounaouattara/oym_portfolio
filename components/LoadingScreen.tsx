@@ -42,12 +42,12 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ isFadingOut }) => {
         </motion.div>
 
         {/* Loading Bar */}
-        <div className="w-48 h-1 bg-white/5 rounded-full overflow-hidden mb-6">
+        <div className="w-48 h-1 bg-white/5 rounded-[0.3px] overflow-hidden mb-6">
           <motion.div 
             initial={{ width: 0 }}
             animate={{ width: "100%" }}
             transition={{ duration: 2, ease: "easeInOut" }}
-            className="h-full bg-sand rounded-full shadow-[0_0_10px_rgba(232,209,167,0.5)]"
+            className="h-full bg-sand rounded-[0.3px] shadow-[0_0_10px_rgba(232,209,167,0.5)]"
           />
         </div>
 

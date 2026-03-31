@@ -32,11 +32,11 @@ const SectionWrapper: React.FC<{
   const defaultColors = ["#FFFFFF", "#E8D1A7", "#9D9167", "#84592B", "#743014", "#442D1C"];
   const colors = bgColors || defaultColors;
   
-  // Very aggressive steps to ensure the transition is visible almost immediately
+  // Adjusted steps to ensure background stays white longer at the top
   const steps = colors.map((_, i) => {
     if (i === 0) return 0;
-    if (i === 1) return 0.02; // Start transition almost immediately
-    return 0.02 + (i - 1) * (0.98 / (colors.length - 2));
+    if (i === 1) return 0.15; // Start transition later
+    return 0.15 + (i - 1) * (0.85 / (colors.length - 2));
   });
 
   const bgColor = useTransform(
@@ -54,7 +54,7 @@ const SectionWrapper: React.FC<{
       variants={variants}
       transition={transition}
       style={{ backgroundColor: showDynamicBg ? bgColor : 'transparent' }}
-      className={`h-screen w-full relative z-10 ${className}`}
+      className={`h-full w-full relative z-10 ${className}`}
     >
       <div 
         ref={containerRef}
@@ -77,64 +77,56 @@ const PageLayout: React.FC<{
   children: React.ReactNode;
 }> = ({ number, label, title, subLabel1, subLabel2, description, menuItems, children }) => (
     <div className="flex flex-col md:flex-row w-full min-h-full">
-    {/* Sidebar - Vertical on Desktop, Horizontal on Mobile */}
-    <div className="w-full md:w-32 border-b md:border-b-0 md:border-r border-black/5 flex md:flex-col items-center justify-between md:justify-start py-4 md:py-32 px-6 md:px-0 sticky top-0 md:h-screen bg-white/5 backdrop-blur-sm md:bg-transparent z-40">
-      <div className="flex md:flex-col items-center gap-4 md:gap-8">
+    {/* Sidebar - Vertical on Desktop, Hidden on Mobile */}
+    <div className="hidden md:flex w-32 border-r border-black/5 flex-col items-center justify-start py-32 px-0 sticky top-0 h-screen bg-transparent z-40">
+      <div className="flex flex-col items-center gap-8">
         <div className="flex flex-col items-center">
-          <span className="text-xl md:text-4xl font-bold font-mono opacity-20 leading-none">{number}</span>
-          <div className="md:hidden w-6 h-[1px] bg-black/10 mt-1" />
+          <span className="text-4xl font-bold font-mono opacity-20 leading-none">{number}</span>
         </div>
-        <div className="hidden md:block h-32 w-[1px] bg-black/5" />
-        <div className="md:[writing-mode:vertical-rl] md:writing-vertical-rl flex md:flex-row gap-3 md:gap-4 items-center">
-          <span className="micro-label whitespace-nowrap text-[9px] md:text-[10px] opacity-60 font-bold tracking-widest">{label}</span>
-          <h2 className="display-text text-base md:text-2xl whitespace-nowrap font-bold tracking-tighter">{title}</h2>
+        <div className="h-32 w-[1px] bg-black/5" />
+        <div className="[writing-mode:vertical-rl] writing-vertical-rl flex flex-row items-center gap-4">
+          <span className="micro-label whitespace-nowrap text-[10px] opacity-60 font-bold tracking-widest uppercase">{label}</span>
+          <h2 className="display-text text-2xl whitespace-nowrap font-bold tracking-tighter uppercase">{title.replace('_', ' ')}</h2>
         </div>
-      </div>
-      <div className="md:hidden flex flex-col items-end gap-1">
-        <div className="flex items-center gap-2">
-          <div className="w-1.5 h-1.5 bg-black rounded-full animate-pulse" />
-          <span className="text-[8px] font-mono font-bold opacity-80 uppercase tracking-widest">{subLabel1}</span>
-        </div>
-        <span className="text-[7px] font-mono opacity-40 uppercase tracking-widest pl-3">{subLabel2}</span>
       </div>
     </div>
     
     {/* Main Content Area */}
-    <div className="flex-1 px-4 md:px-12 lg:px-20 py-4 md:py-12">
+    <div className="flex-1 px-4 md:px-12 lg:px-20 py-6 md:py-12 overflow-x-hidden">
       {/* Page Introduction & Mini-Menu (At a glance) */}
       {(description || menuItems) && (
-        <div className="mb-4 md:mb-8 border-b border-black/10 pb-4 md:pb-6">
+        <div className="mb-6 md:mb-8 border-b border-black/10 pb-6 md:pb-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-12">
             <div className="max-w-2xl">
-              <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-6">
-                <div className="w-1.5 h-1.5 bg-black rounded-full animate-pulse" />
-                <span className="text-[7px] md:text-[10px] font-mono font-bold uppercase tracking-[0.3em] md:tracking-[0.4em]">Page_Overview</span>
+              <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                <div className="w-1.5 h-1.5 bg-black rounded-[0.3px] animate-pulse" />
+                <span className="text-[8px] md:text-[10px] font-mono font-bold uppercase tracking-[0.3em] md:tracking-[0.4em]">Page_Overview</span>
               </div>
-              <h1 className="text-2xl md:text-6xl font-mono font-bold text-fg mb-3 md:mb-6 uppercase tracking-tighter leading-none">
+              <h1 className="text-3xl md:text-6xl font-mono font-bold text-fg mb-3 md:mb-6 uppercase tracking-tighter leading-none">
                 {title.replace('_', ' ')}
               </h1>
               {description && (
-                <p className="text-[10px] md:text-sm font-mono text-black/60 leading-relaxed italic">
+                <p className="text-xs md:text-sm font-mono text-black/60 leading-relaxed italic border-l-2 border-black/5 pl-4 py-1 max-w-lg">
                   {">"} {description}
                 </p>
               )}
             </div>
             
-            <div className="flex flex-col items-start md:items-end gap-6">
-              <div className="text-left md:text-right">
+            <div className="flex flex-col items-start md:items-end gap-4 md:gap-6">
+              <div className="hidden sm:block md:block text-right">
                 <p className="text-[8px] md:text-[9px] font-mono opacity-40 uppercase tracking-[0.4em]">{subLabel1}</p>
                 <p className="text-[8px] md:text-[9px] font-mono opacity-20 uppercase tracking-[0.2em] mt-1">{subLabel2}</p>
               </div>
 
               {menuItems && (
-                <div className="flex flex-col gap-2 md:gap-4 items-start md:items-end">
-                  <span className="text-[6px] md:text-[8px] font-mono opacity-30 uppercase tracking-widest">Quick_Navigation</span>
-                  <div className="flex flex-wrap gap-1.5 md:gap-4 justify-start md:justify-end">
+                <div className="flex flex-col gap-2 md:gap-4 items-start md:items-end w-full hidden md:flex">
+                  <span className="text-[7px] md:text-[8px] font-mono opacity-30 uppercase tracking-widest">Quick_Navigation</span>
+                  <div className="flex flex-wrap gap-2 md:gap-4 justify-start md:justify-end">
                     {menuItems.map((item, i) => (
                       <a 
                         key={i} 
                         href={item.href} 
-                        className="px-2.5 py-1 md:px-4 md:py-2 bg-black/5 border border-black/10 text-[7px] md:text-[9px] font-mono font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all"
+                        className="px-2 py-1 md:px-4 md:py-2 bg-black/5 border border-black/10 text-[7px] md:text-[9px] font-mono font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all active:scale-95"
                       >
                         {item.label}
                       </a>
@@ -159,12 +151,22 @@ const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hasMovedMouse, setHasMovedMouse] = useState(false);
   const [lang, setLang] = useState<'fr' | 'en'>('fr');
+  const [titleIndex, setTitleIndex] = useState(0);
+
+  const titles = ["DATA SCIENTIST", "DATA ANALYST", "AI ENGINEER", "ML ENGINEER"];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTitleIndex((prev) => (prev + 1) % titles.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   const translations = {
     fr: {
       home: 'ACCUEIL',
-      projects: 'MES PROJETS',
-      about: 'MON PROFIL',
+      projects: 'PROJETS',
+      about: 'PROFIL',
       skills: 'COMPÉTENCES',
       passion: 'PASSIONS',
       contact: 'CONTACT',
@@ -207,8 +209,8 @@ const App: React.FC = () => {
     },
     en: {
       home: 'HOME',
-      projects: 'MY PROJECTS',
-      about: 'MY PROFILE',
+      projects: 'PROJECTS',
+      about: 'PROFILE',
       skills: 'SKILLS',
       passion: 'PASSIONS',
       contact: 'CONTACT',
@@ -273,6 +275,27 @@ const App: React.FC = () => {
     { id: 'contact', label: t.contact },
   ];
 
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('down');
+
+  const handleScrollToggle = () => {
+    // Look for any scrollable container in the document
+    const activeContainer = document.querySelector('.overflow-y-auto');
+    if (activeContainer) {
+      const currentScroll = activeContainer.scrollTop;
+      const maxScroll = activeContainer.scrollHeight - activeContainer.clientHeight;
+      
+      // If we are closer to the bottom (more than 10% from top and past halfway), go to top. 
+      // Otherwise go to bottom.
+      if (currentScroll > maxScroll / 2) {
+        activeContainer.scrollTo({ top: 0, behavior: 'smooth' });
+        setScrollDirection('down');
+      } else {
+        activeContainer.scrollTo({ top: activeContainer.scrollHeight, behavior: 'smooth' });
+        setScrollDirection('up');
+      }
+    }
+  };
+
   const renderSection = () => {
     const transition = {
       duration: 1,
@@ -296,11 +319,11 @@ const App: React.FC = () => {
             isScrollable={false}
           >
             <div className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden px-4 sm:px-6">
-              {/* Massive Background Title */}
+              {/* Massive Background Title - Hidden or simplified on mobile */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 overflow-hidden">
                 <motion.h1 
                   key={isCyberMode ? 'cyber-bg' : 'normal-bg'}
-                  className={`display-text text-[25vw] md:text-[25vw] tracking-tighter leading-none select-none whitespace-nowrap ${isCyberMode ? 'opacity-[0.1] text-cyan-400' : 'opacity-[0.03] text-black'}`}
+                  className={`display-text text-[25vw] md:text-[25vw] tracking-tighter leading-none select-none whitespace-nowrap hidden sm:block ${isCyberMode ? 'opacity-[0.1] text-cyan-400' : 'opacity-[0.03] text-black'}`}
                   initial={{ x: -100, opacity: 0 }}
                   animate={{ x: 0, opacity: isCyberMode ? 0.1 : 0.03 }}
                   transition={{ duration: 2, ease: "easeOut" }}
@@ -314,17 +337,17 @@ const App: React.FC = () => {
               <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] md:w-[40vw] md:h-[40vw] pointer-events-none z-0 transition-all duration-1000 ${isCyberMode ? 'grainy-glow-cyan opacity-40' : 'grainy-glow-blue opacity-20'}`} />
               
               {/* Corner Labels - Responsive positioning */}
-                  <div className={`absolute top-[25vw] md:top-24 left-4 md:left-8 flex flex-col z-30 transition-colors duration-1000 ${isCyberMode ? 'text-cyan-400' : 'text-black'}`}>
-                    <span className="text-[5px] md:text-[8px] font-mono font-bold uppercase tracking-[0.2em] md:tracking-[0.5em] mb-1">SYSTEM_STATUS: {isCyberMode ? 'OVERDRIVE' : 'OPTIMAL'}</span>
-                    <span className="text-[4px] md:text-[7px] font-mono opacity-40 uppercase tracking-[0.1em] md:tracking-[0.2em]">{isCyberMode ? 'VAPOR_LINK_ACTIVE' : 'NEURAL_LINK_ESTABLISHED'}</span>
+                  <div className={`absolute top-20 md:top-24 left-6 md:left-8 flex flex-col z-30 transition-colors duration-1000 ${isCyberMode ? 'text-cyan-400' : 'text-black'}`}>
+                    <span className="text-[7px] md:text-[8px] font-mono font-bold uppercase tracking-[0.2em] md:tracking-[0.5em] mb-1">SYSTEM_STATUS: {isCyberMode ? 'OVERDRIVE' : 'OPTIMAL'}</span>
+                    <span className="text-[6px] md:text-[7px] font-mono opacity-40 uppercase tracking-[0.1em] md:tracking-[0.2em]">{isCyberMode ? 'VAPOR_LINK_ACTIVE' : 'NEURAL_LINK_ESTABLISHED'}</span>
                   </div>
                   
-                  <div className={`absolute top-[25vw] md:top-24 right-4 md:right-8 z-30 text-right transition-colors duration-1000 ${isCyberMode ? 'text-cyan-400' : 'text-black'}`}>
-                    <span className="micro-label text-[4px] md:text-[6px]">{isCyberMode ? 'MODULE_99' : 'MODULE_01'}</span>
+                  <div className={`absolute top-20 md:top-24 right-6 md:right-8 z-30 text-right transition-colors duration-1000 ${isCyberMode ? 'text-cyan-400' : 'text-black'}`}>
+                    <span className="micro-label text-[6px] md:text-[6px]">{isCyberMode ? 'MODULE_99' : 'MODULE_01'}</span>
                   </div>
 
               {/* Central Content */}
-              <div className="relative z-20 flex flex-col items-center gap-2 md:gap-8 w-full max-w-5xl">
+              <div className="relative z-20 flex flex-col items-center gap-6 md:gap-8 w-full max-w-5xl px-4">
                   <div className="relative group">
                     <motion.div 
                       onClick={() => setIsCyberMode(!isCyberMode)}
@@ -336,7 +359,7 @@ const App: React.FC = () => {
                       scale: { duration: 10, repeat: Infinity, ease: "easeInOut" },
                       rotate: isCyberMode ? { duration: 20, repeat: Infinity, ease: "linear" } : { duration: 8, repeat: Infinity, ease: "easeInOut" }
                     }}
-                    className={`w-[180px] h-[180px] sm:w-[240px] sm:h-[240px] md:w-[450px] md:h-[450px] flex items-center justify-center relative shadow-2xl cursor-pointer transition-all duration-1000 ${isCyberMode ? 'bg-cyan-500/10 border border-cyan-400/30 backdrop-blur-xl rounded-2xl' : 'liquid-shape animate-liquid'}`}
+                    className={`w-[200px] h-[200px] sm:w-[280px] sm:h-[280px] md:w-[450px] md:h-[450px] flex items-center justify-center relative shadow-2xl cursor-pointer transition-all duration-1000 ${isCyberMode ? 'bg-cyan-500/10 border border-cyan-400/30 backdrop-blur-xl rounded-2xl' : 'liquid-shape animate-liquid'}`}
                   >
                     <AnimatePresence mode="wait">
                       {!isCyberMode ? (
@@ -436,24 +459,24 @@ const App: React.FC = () => {
                   {/* Hint under the core - REMOVED from here, moved inside core */}
                 </div>
 
-                <div className="text-center space-y-4">
+                <div className="text-center space-y-4 md:space-y-6">
                   <motion.h2 
-                    key={isCyberMode ? 'cyber-title' : 'normal-title'}
-                    className={`display-text text-2xl sm:text-4xl md:text-8xl tracking-tight leading-none transition-colors duration-1000 ${isCyberMode ? 'text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]' : 'text-black'}`}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                    key={titles[titleIndex]}
+                    className={`display-text text-3xl sm:text-6xl md:text-8xl tracking-tight leading-none transition-colors duration-1000 ${isCyberMode ? 'text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]' : 'text-black'}`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    {isCyberMode ? 'ML ENGINEER' : t.dataScientist}
+                    {titles[titleIndex]}
                   </motion.h2>
                   <motion.p 
-                    key={isCyberMode ? 'cyber-sub' : 'normal-sub'}
-                    className={`text-[10px] md:text-xs uppercase tracking-[0.4em] font-mono transition-colors duration-1000 ${isCyberMode ? 'text-fuchsia-400 opacity-80' : 'opacity-40 text-black'}`}
+                    className={`text-sm md:text-lg font-bold uppercase tracking-[0.5em] font-mono transition-colors duration-1000 ${isCyberMode ? 'text-fuchsia-400' : 'text-black opacity-80'}`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5, duration: 1.5 }}
+                    transition={{ delay: 0.3 }}
                   >
-                    {t.subTitle}
+                    MOUNA OUATTARA
                   </motion.p>
                   
                   {isCyberMode && (
@@ -534,9 +557,8 @@ const App: React.FC = () => {
             id="about"
             variants={variants}
             transition={transition}
-            showDynamicBg={true}
+            showDynamicBg={false}
             className="px-0"
-            bgColors={["#FFFFFF", "#E8D1A7", "#9D9167", "#84592B", "#743014", "#442D1C"]}
           >
             <PageLayout
               number="03"
@@ -552,7 +574,7 @@ const App: React.FC = () => {
               ]}
             >
               <About lang={lang} />
-              <div id="timeline-section" className="mt-12 md:mt-24 scroll-mt-32 pb-[100vh]">
+              <div id="timeline-section" className="mt-12 md:mt-24 scroll-mt-32 pb-32 md:pb-[50vh]">
                 <Timeline />
               </div>
             </PageLayout>
@@ -607,25 +629,47 @@ const App: React.FC = () => {
               ]}
             >
               <div className="space-y-12 md:space-y-20">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
                   <div id="movies" className="space-y-6 md:space-y-8 scroll-mt-32">
-                    <h3 className="text-xl md:text-2xl font-mono font-bold border-b border-black/10 pb-4">{lang === 'fr' ? 'Derniers Films' : 'Latest Movies'}</h3>
+                    <h3 className="text-xl md:text-2xl font-mono font-bold border-b border-black/10 pb-4 flex items-center gap-3">
+                      <span className="w-1.5 h-1.5 bg-black rounded-[0.3px]" />
+                      {lang === 'fr' ? 'Derniers Films' : 'Latest Movies'}
+                    </h3>
                     <div className="grid grid-cols-1 gap-4">
-                      {['Inception', 'The Matrix', 'Interstellar'].map((movie, i) => (
-                        <div key={i} className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 bg-black/5 border border-black/5 hover:border-black/20 transition-all">
-                          <img src={`https://picsum.photos/seed/movie${i}/300/40`} alt={movie} className="w-full sm:w-[200px] md:w-[300px] h-[60px] sm:h-[40px] object-cover grayscale opacity-60" referrerPolicy="no-referrer" />
-                          <span className="font-mono text-xs md:text-sm">{movie}</span>
+                      {['No Other Choices', 'Parasite', 'Strange Darlings'].map((movie, i) => (
+                        <div key={i} className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 bg-black/5 border border-black/5 hover:border-black/20 transition-all group">
+                          <img src={`https://picsum.photos/seed/movie${i}/300/40`} alt={movie} className="w-full sm:w-[200px] md:w-[300px] h-[60px] sm:h-[40px] object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" referrerPolicy="no-referrer" />
+                          <span className="font-mono text-sm font-bold uppercase tracking-tight">{movie}</span>
                         </div>
                       ))}
                     </div>
                   </div>
                   <div id="games" className="space-y-6 md:space-y-8 scroll-mt-32">
-                    <h3 className="text-xl md:text-2xl font-mono font-bold border-b border-black/10 pb-4">{lang === 'fr' ? 'Derniers Jeux' : 'Latest Games'}</h3>
+                    <h3 className="text-xl md:text-2xl font-mono font-bold border-b border-black/10 pb-4 flex items-center gap-3">
+                      <span className="w-1.5 h-1.5 bg-black rounded-[0.3px]" />
+                      {lang === 'fr' ? 'Derniers Jeux' : 'Latest Games'}
+                    </h3>
                     <div className="grid grid-cols-1 gap-4">
-                      {['Elden Ring', 'Cyberpunk 2077', 'Zelda: TotK'].map((game, i) => (
-                        <div key={i} className="flex items-center gap-4 p-4 bg-black/5 border border-black/5 hover:border-black/20 transition-all">
-                          <img src={`https://picsum.photos/seed/game${i}/100/100`} alt={game} className="w-16 h-16 md:w-[100px] md:h-[100px] object-cover grayscale opacity-60" referrerPolicy="no-referrer" />
-                          <span className="font-mono text-xs md:text-sm">{game}</span>
+                      {['Night in the Woods', 'Gris', 'Into the Dead: Our Darkests Hour'].map((game, i) => (
+                        <div key={i} className="flex items-center gap-4 p-4 bg-black/5 border border-black/5 hover:border-black/20 transition-all group">
+                          <img src={`https://picsum.photos/seed/game${i}/100/100`} alt={game} className="w-16 h-16 md:w-[100px] md:h-[100px] object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" referrerPolicy="no-referrer" />
+                          <span className="font-mono text-sm font-bold uppercase tracking-tight">{game}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div id="sports" className="space-y-6 md:space-y-8 scroll-mt-32">
+                    <h3 className="text-xl md:text-2xl font-mono font-bold border-b border-black/10 pb-4 flex items-center gap-3">
+                      <span className="w-1.5 h-1.5 bg-black rounded-[0.3px]" />
+                      {lang === 'fr' ? 'Sports & Activités' : 'Sports & Activities'}
+                    </h3>
+                    <div className="grid grid-cols-1 gap-4">
+                      {['Hiking', 'Swimming', 'Escalade'].map((sport, i) => (
+                        <div key={i} className="flex items-center gap-4 p-4 bg-black/5 border border-black/5 hover:border-black/20 transition-all group">
+                          <div className="w-16 h-16 md:w-[100px] md:h-[100px] bg-black/10 flex items-center justify-center overflow-hidden">
+                            <img src={`https://picsum.photos/seed/sport${i}/100/100`} alt={sport} className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" referrerPolicy="no-referrer" />
+                          </div>
+                          <span className="font-mono text-sm font-bold uppercase tracking-tight">{sport}</span>
                         </div>
                       ))}
                     </div>
@@ -633,7 +677,9 @@ const App: React.FC = () => {
                 </div>
                 <div id="mood" className="flex flex-col items-center gap-6 md:gap-8 py-8 md:py-12 border-t border-black/10 scroll-mt-32">
                   <span className="micro-label">{lang === 'fr' ? 'Indicateur_Humeur' : 'Mood_Indicator'}</span>
-                  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJ6eGZ6eGZ6eGZ6eGZ6eGZ6eGZ6eGZ6eGZ6eGZ6eGZ6eGZ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/vFKqnCdLPNOKc/giphy.gif" alt="Funny Cat" className="w-48 h-48 md:w-64 md:h-64 object-cover rounded-lg shadow-xl" referrerPolicy="no-referrer" />
+                  <div className="w-48 h-48 md:w-64 md:h-64 bg-black/5 border border-black/10 flex items-center justify-center rounded-lg">
+                    <span className="text-[10px] font-mono opacity-40 uppercase tracking-widest">{lang === 'fr' ? 'Humeur: Créative' : 'Mood: Creative'}</span>
+                  </div>
                 </div>
               </div>
             </PageLayout>
@@ -697,28 +743,53 @@ const App: React.FC = () => {
       </div>
 
       {/* Split Navigation - Integrated HUD Style */}
-      <nav className="fixed top-0 left-0 w-full z-[100] px-6 py-6 md:px-12 md:py-10 flex justify-between items-start pointer-events-none font-mono">
+      <nav className={`fixed top-0 left-0 w-full z-[100] h-14 md:h-auto px-6 md:px-12 md:py-10 grid grid-cols-3 items-center pointer-events-none font-mono transition-all duration-500 ${
+        activeSection === 'home' 
+          ? 'bg-transparent border-none md:bg-transparent md:border-none' 
+          : 'bg-white backdrop-blur-md border-b border-black/5 md:bg-transparent md:backdrop-blur-none md:border-none'
+      }`}>
         {/* Left Side: Logo & Status */}
-        <motion.div 
-          className="pointer-events-auto cursor-pointer flex flex-col gap-2 md:gap-4"
-          whileHover={{ x: 5 }}
-          onClick={() => setActiveSection('home')}
-        >
-          <div className="flex items-center gap-3 md:gap-4">
-            <div className="w-8 h-8 md:w-12 md:h-12 border border-black/20 flex items-center justify-center font-bold text-base md:text-xl relative">
-              <div className="absolute -top-1 -left-1 w-1.5 h-1.5 border-t border-l border-black" />
-              <div className="absolute -bottom-1 -right-1 w-1.5 h-1.5 border-b border-r border-black" />
-              MO
+        <div className="flex justify-start items-center h-full">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="pointer-events-auto cursor-pointer flex flex-col justify-center"
+            whileHover={{ x: 5 }}
+            onClick={() => setActiveSection('home')}
+          >
+            <div className="flex items-center gap-3 md:gap-4">
+              <div className={`border border-black/20 flex items-center justify-center font-bold relative transition-all duration-500 ${
+                activeSection === 'home' 
+                  ? 'w-8 h-8 md:w-12 md:h-12 text-base md:text-xl' 
+                  : 'w-8 h-8 md:w-10 md:h-10 text-base md:text-[14px]'
+              }`}>
+                <div className="absolute -top-0.5 -left-0.5 w-1 h-1 border-t border-l border-black" />
+                <div className="absolute -bottom-0.5 -right-0.5 w-1 h-1 border-b border-r border-black" />
+                MO
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
+
+        {/* Center: Page Title (Mobile only, non-home) */}
+        <div className="flex justify-center items-center h-full">
+          {activeSection !== 'home' && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="md:hidden text-[11px] font-bold uppercase tracking-[0.4em] text-black whitespace-nowrap text-center"
+            >
+              {tabs.find(t => t.id === activeSection)?.label}
+            </motion.div>
+          )}
+        </div>
 
         {/* Right Side: Navigation Links */}
-        <div className="pointer-events-auto flex flex-col items-end gap-2 md:gap-6">
+        <div className="pointer-events-auto flex justify-end items-center h-full">
           {/* Mobile Menu Toggle */}
           <button 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 bg-white/80 border border-black/10 text-black backdrop-blur-md"
+            className="md:hidden p-2 bg-black text-white border border-black/10 backdrop-blur-md shadow-lg active:scale-95 transition-transform"
           >
             {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -745,65 +816,6 @@ const App: React.FC = () => {
             ))}
           </div>
 
-          {/* Mobile Dropdown Menu */}
-          <AnimatePresence>
-            {isMenuOpen && (
-              <motion.div 
-                initial={{ opacity: 0, x: '100%' }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: '100%' }}
-                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="md:hidden fixed inset-0 z-[200] bg-white/95 backdrop-blur-2xl flex flex-col items-center justify-center gap-8 p-10"
-              >
-                <button 
-                  onClick={() => setIsMenuOpen(false)}
-                  className="absolute top-10 right-10 p-4 bg-black text-white rounded-full shadow-2xl"
-                >
-                  <X size={24} />
-                </button>
-                
-                <div className="flex flex-col items-center gap-12 w-full">
-                  <div className="flex flex-col items-center gap-2 mb-8">
-                    <div className="w-12 h-12 bg-black text-white flex items-center justify-center font-bold text-xl relative">
-                      <div className="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-black" />
-                      <div className="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-black" />
-                      MO
-                    </div>
-                  </div>
-
-                  {tabs.map((tab, idx) => (
-                    <motion.button
-                      key={tab.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.1 }}
-                      onClick={() => {
-                        setActiveSection(tab.id);
-                        setIsMenuOpen(false);
-                      }}
-                      className={`text-2xl font-bold uppercase tracking-[0.4em] relative group ${
-                        activeSection === tab.id ? 'text-black' : 'text-black/30'
-                      }`}
-                    >
-                      {tab.label}
-                      {activeSection === tab.id && (
-                        <motion.div 
-                          layoutId="mobile-nav-dot"
-                          className="absolute -left-8 top-1/2 -translate-y-1/2 w-2 h-2 bg-black rounded-full"
-                        />
-                      )}
-                    </motion.button>
-                  ))}
-                </div>
-
-                <div className="mt-auto pt-12 border-t border-black/5 w-full flex justify-center gap-8 opacity-40 text-[10px] font-mono tracking-widest">
-                  <span>V4.0 // 2026</span>
-                  <span>AI_DATA_ENGINEER</span>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
           <div className="hidden md:flex items-center gap-4 opacity-20">
             <div className="h-[1px] w-24 bg-black" />
             <span className="text-[9px] tracking-[0.5em]">{t.navInterface}</span>
@@ -811,65 +823,152 @@ const App: React.FC = () => {
         </div>
       </nav>
 
+      {/* Mobile Dropdown Menu - Moved outside nav */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="md:hidden fixed inset-0 z-[200] bg-white flex flex-col pointer-events-auto"
+          >
+            {/* Background Pattern for Mobile Menu */}
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none overflow-hidden flex items-center justify-center">
+              <div className="display-text text-[40vw] rotate-90">MENU</div>
+            </div>
+
+            <div className="flex items-center justify-between px-6 h-14 border-b border-black/5 relative z-20">
+              <div className="w-8 h-8 border border-black/20 flex items-center justify-center font-bold font-mono text-base relative">
+                <div className="absolute -top-0.5 -left-0.5 w-1 h-1 border-t border-l border-black" />
+                <div className="absolute -bottom-0.5 -right-0.5 w-1 h-1 border-b border-r border-black" />
+                MO
+              </div>
+              <button 
+                onClick={() => setIsMenuOpen(false)}
+                className="p-1.5 bg-black text-white rounded-[0.3px] shadow-xl active:scale-90 transition-transform"
+                aria-label="Close Menu"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            
+            <div className="flex flex-col items-center justify-center flex-1 w-full relative z-10 px-6">
+              <div className="flex flex-col items-center gap-3 w-full">
+                {tabs.map((tab, idx) => (
+                  <motion.button
+                    key={tab.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.05, ease: "easeOut" }}
+                    onClick={() => {
+                      setActiveSection(tab.id);
+                      setIsMenuOpen(false);
+                    }}
+                    className={`w-full py-1.5 text-base font-bold uppercase tracking-[0.4em] relative group text-center transition-colors ${
+                      activeSection === tab.id ? 'text-black' : 'text-black/20'
+                    }`}
+                  >
+                    {tab.label}
+                    {activeSection === tab.id && (
+                      <motion.div 
+                        layoutId="mobile-nav-line"
+                        className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-black"
+                      />
+                    )}
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+
+            <div className="pb-12 pt-8 flex flex-col items-center gap-4 opacity-30 text-[9px] font-mono tracking-widest uppercase border-t border-black/5">
+              <span>MOUNA_OUATTARA // 2026</span>
+              <div className="w-12 h-[1px] bg-black/20" />
+              <span>SYSTEM_CORE: STABLE</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Main Content - Tabbed with AnimatePresence */}
-      <main className="relative z-10 w-full h-screen overflow-hidden">
+      <main className={`relative z-10 w-full h-screen overflow-hidden transition-all duration-500 ${activeSection === 'home' ? 'pt-0' : 'pt-14 md:pt-0'}`}>
         <AnimatePresence mode="wait">
           {renderSection()}
         </AnimatePresence>
       </main>
 
-      {/* Bottom Right Controls: CV & Languages */}
-      <div className="fixed bottom-16 md:bottom-20 right-4 md:right-10 z-[100] flex flex-col items-end gap-2 md:gap-4 pointer-events-none">
-        {/* Download CV Button */}
+      {/* Scroll Toggle Button - Only on non-home pages */}
+      {activeSection !== 'home' && (
         <motion.button
-          whileHover={{ scale: 1.05, x: -5 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => {
-            const link = document.createElement('a');
-            link.href = '/CV_Mouna_Ouattara.pdf'; // Path to the file in the public folder
-            link.download = 'CV_Mouna_Ouattara.pdf';
-            link.click();
-          }}
-          className={`pointer-events-auto flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 md:py-3 border font-mono transition-all duration-500 group ${
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={handleScrollToggle}
+          className={`fixed bottom-16 md:bottom-20 right-4 md:right-10 z-[100] p-3 md:p-4 border backdrop-blur-md shadow-xl pointer-events-auto transition-all duration-500 ${
             isCyberMode 
-              ? 'bg-cyan-500/10 border-cyan-400 text-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:bg-cyan-500/20' 
-              : 'bg-white border-black/10 text-black hover:bg-black hover:text-white shadow-lg'
+              ? 'bg-cyan-500/10 border-cyan-400 text-cyan-400' 
+              : 'bg-white border-black/10 text-black'
           }`}
         >
-          <Download className="w-3 h-3 md:w-4 md:h-4 group-hover:animate-bounce" />
-          <span className="text-[8px] md:text-[10px] font-bold uppercase tracking-[0.2em] md:tracking-[0.3em]">{t.downloadCV}</span>
+          {scrollDirection === 'down' ? <ChevronRight className="rotate-90" size={20} /> : <ChevronRight className="-rotate-90" size={20} />}
         </motion.button>
+      )}
 
-        {/* Language Switcher */}
-        <div className={`pointer-events-auto flex items-center gap-3 md:gap-4 px-4 md:px-6 py-1.5 md:py-2 border font-mono transition-all duration-500 ${
-          isCyberMode 
-            ? 'bg-black/40 border-cyan-400/30 text-cyan-400' 
-            : 'bg-white/80 border-black/5 text-black'
-        }`}>
-          <Globe className={`w-3 h-3 md:w-4 md:h-4 ${isCyberMode ? 'text-cyan-400' : 'opacity-40'}`} />
-          <div className="flex items-center gap-1.5 md:gap-2">
-            <button 
-              onClick={() => setLang('fr')}
-              className={`text-[8px] md:text-[10px] font-bold transition-all ${lang === 'fr' ? (isCyberMode ? 'text-cyan-400' : 'text-black') : 'opacity-30 hover:opacity-60'}`}
-            >
-              FR
-            </button>
-            <span className="text-[8px] md:text-[10px] opacity-20">/</span>
-            <button 
-              onClick={() => setLang('en')}
-              className={`text-[8px] md:text-[10px] font-bold transition-all ${lang === 'en' ? (isCyberMode ? 'text-cyan-400' : 'text-black') : 'opacity-30 hover:opacity-60'}`}
-            >
-              EN
-            </button>
+      {/* Bottom Right Controls: CV & Languages - Only on home page */}
+      {activeSection === 'home' && (
+        <div className="fixed bottom-16 md:bottom-20 right-4 md:right-10 z-[100] flex flex-col items-end gap-2 md:gap-4 pointer-events-none">
+          {/* Download CV Button */}
+          <motion.button
+            whileHover={{ scale: 1.05, x: -5 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              const link = document.createElement('a');
+              link.href = '/CV_Mouna_Ouattara.pdf'; // Path to the file in the public folder
+              link.download = 'CV_Mouna_Ouattara.pdf';
+              link.click();
+            }}
+            className={`pointer-events-auto flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 md:py-3 border font-mono transition-all duration-500 group ${
+              isCyberMode 
+                ? 'bg-cyan-500/10 border-cyan-400 text-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:bg-cyan-500/20' 
+                : 'bg-white border-black/10 text-black hover:bg-black hover:text-white shadow-lg'
+            }`}
+          >
+            <Download className="w-3 h-3 md:w-4 md:h-4 group-hover:animate-bounce" />
+            <span className="text-[8px] md:text-[10px] font-bold uppercase tracking-[0.2em] md:tracking-[0.3em]">{t.downloadCV}</span>
+          </motion.button>
+
+          {/* Language Switcher */}
+          <div className={`pointer-events-auto flex items-center gap-3 md:gap-4 px-4 md:px-6 py-1.5 md:py-2 border font-mono transition-all duration-500 ${
+            isCyberMode 
+              ? 'bg-black/40 border-cyan-400/30 text-cyan-400' 
+              : 'bg-white/80 border-black/5 text-black'
+          }`}>
+            <Globe className={`w-3 h-3 md:w-4 md:h-4 ${isCyberMode ? 'text-cyan-400' : 'opacity-40'}`} />
+            <div className="flex items-center gap-1.5 md:gap-2">
+              <button 
+                onClick={() => setLang('fr')}
+                className={`text-[8px] md:text-[10px] font-bold transition-all ${lang === 'fr' ? (isCyberMode ? 'text-cyan-400' : 'text-black') : 'opacity-30 hover:opacity-60'}`}
+              >
+                FR
+              </button>
+              <span className="text-[8px] md:text-[10px] opacity-20">/</span>
+              <button 
+                onClick={() => setLang('en')}
+                className={`text-[8px] md:text-[10px] font-bold transition-all ${lang === 'en' ? (isCyberMode ? 'text-cyan-400' : 'text-black') : 'opacity-30 hover:opacity-60'}`}
+              >
+                EN
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Bottom HUD Status Bar */}
       <div className="fixed bottom-0 left-0 w-full h-8 md:h-12 border-t border-black/5 bg-white/60 backdrop-blur-md z-50 flex items-center justify-between px-4 md:px-10 font-mono text-[8px] md:text-[10px] tracking-widest text-black/40">
         <div className="flex items-center gap-4 md:gap-8">
           <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-black rounded-full animate-pulse" />
+            <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-black rounded-[0.3px] animate-pulse" />
             <span className="hidden sm:inline">{t.coreSync}</span>
             <span className="sm:hidden">SYNC</span>
           </div>

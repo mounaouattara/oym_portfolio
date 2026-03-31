@@ -23,8 +23,8 @@ const RecruiterHUD: React.FC<RecruiterHUDProps> = ({ onContactClick }) => {
                 <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
                     <div className="flex items-center gap-4">
                         <div className="relative">
-                            <div className="w-2.5 h-2.5 bg-cyan-400 rounded-full shadow-[0_0_10px_rgba(0,240,255,0.8)]"></div>
-                            <div className="absolute inset-0 bg-cyan-400 rounded-full animate-ping opacity-40"></div>
+                            <div className="w-2.5 h-2.5 bg-cyan-400 rounded-[0.3px] shadow-[0_0_10px_rgba(0,240,255,0.8)]"></div>
+                            <div className="absolute inset-0 bg-cyan-400 rounded-[0.3px] animate-ping opacity-40"></div>
                         </div>
                         <div className="flex flex-col">
                             <span className="font-tech text-[10px] font-bold tracking-[0.3em] text-white">SYSTEM_STATUS</span>
@@ -38,7 +38,7 @@ const RecruiterHUD: React.FC<RecruiterHUDProps> = ({ onContactClick }) => {
                     <div className="text-[10px] font-mono text-white/30 uppercase tracking-[0.2em] mb-1">Subject_ID</div>
                     <h3 className="text-white font-display text-2xl font-bold tracking-tight mb-1">Mouna Ouattara</h3>
                     <div className="flex items-center gap-2">
-                        <div className="w-1 h-1 bg-white/20 rounded-full"></div>
+                        <div className="w-1 h-1 bg-white/20 rounded-[0.3px]"></div>
                         <p className="text-gray-400 text-xs font-tech tracking-widest uppercase">Senior Data Scientist</p>
                     </div>
                 </div>
@@ -52,7 +52,7 @@ const RecruiterHUD: React.FC<RecruiterHUDProps> = ({ onContactClick }) => {
                             <span className="text-[8px] font-mono text-cyan-400/50">98% Match</span>
                         </div>
                         <div className="text-white text-sm font-tech tracking-wider mb-3">NEURAL ARCHITECTURE & LLMs</div>
-                        <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                        <div className="h-1 w-full bg-white/5 rounded-[0.3px] overflow-hidden">
                             <div className="h-full bg-cyan-400 w-[98%] animate-[shimmer_2s_infinite]"></div>
                         </div>
                      </div>

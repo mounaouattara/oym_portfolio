@@ -39,25 +39,25 @@ const ContactSection: React.FC = () => {
               <div className="h-[1px] w-12 md:w-24 bg-black/20" />
             </div>
             
-            <h2 className="text-5xl sm:text-7xl md:text-8xl font-bold text-fg mb-8 md:mb-12 tracking-tighter leading-[0.9] md:leading-[0.8] uppercase">
+            <h2 className="text-4xl sm:text-7xl md:text-8xl font-bold text-fg mb-6 md:mb-12 tracking-tighter leading-[1] md:leading-[0.8] uppercase">
               LET'S <br/> <span className="text-black italic font-light">CONNECT</span>.
             </h2>
-            <p className="text-base md:text-lg text-black/60 leading-relaxed max-w-md font-mono italic">
+            <p className="text-sm md:text-lg text-black/60 leading-relaxed max-w-md font-mono italic">
               {'>'} "Fusing data architecture with human-centric design to build the future."
             </p>
           </div>
 
           <div className="space-y-8 md:space-y-12">
             <div className="group">
-              <span className="block text-[8px] md:text-[9px] font-mono font-bold uppercase tracking-[0.3em] md:tracking-[0.4em] text-black/40 mb-3 md:mb-4">DIRECT_TRANSMISSION</span>
-              <a href="mailto:mounaouattara04@gmail.com" className="text-xl md:text-3xl font-mono font-bold text-fg hover:text-black transition-all uppercase break-all">
+              <span className="block text-[8px] md:text-[9px] font-mono font-bold uppercase tracking-[0.3em] md:tracking-[0.4em] text-black/40 mb-2 md:mb-4">DIRECT_TRANSMISSION</span>
+              <a href="mailto:mounaouattara04@gmail.com" className="text-lg md:text-3xl font-mono font-bold text-fg hover:text-black transition-all uppercase break-all">
                 mounaouattara04@gmail.com
               </a>
             </div>
 
             <div className="group">
-              <span className="block text-[8px] md:text-[9px] font-mono font-bold uppercase tracking-[0.3em] md:tracking-[0.4em] text-black/40 mb-3 md:mb-4">BASE_COORDINATES</span>
-              <span className="text-xl md:text-3xl font-mono font-bold text-fg uppercase">Paris, France // Remote</span>
+              <span className="block text-[8px] md:text-[9px] font-mono font-bold uppercase tracking-[0.3em] md:tracking-[0.4em] text-black/40 mb-2 md:mb-4">BASE_COORDINATES</span>
+              <span className="text-lg md:text-3xl font-mono font-bold text-fg uppercase">Paris, France // Remote</span>
             </div>
           </div>
 

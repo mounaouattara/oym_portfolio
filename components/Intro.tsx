@@ -55,7 +55,7 @@ const Intro: React.FC = () => {
           >
             <div className="scan-line" />
             
-            <div className="w-12 h-12 rounded-full border border-fg/10 flex items-center justify-center text-fg/20 mb-12 group-hover:text-accent group-hover:border-accent/40 transition-all duration-700 group-hover:scale-110 glossy">
+            <div className="w-12 h-12 rounded-[0.3px] border border-fg/10 flex items-center justify-center text-fg/20 mb-12 group-hover:text-accent group-hover:border-accent/40 transition-all duration-700 group-hover:scale-110 glossy">
               {feature.icon}
             </div>
             <div className="medical-label text-accent mb-4">{feature.title}</div>

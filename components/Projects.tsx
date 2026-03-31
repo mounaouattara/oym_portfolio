@@ -22,14 +22,11 @@ const ProjectCard: React.FC<{ project: Project; onOpenProject: (project: Project
       onClick={() => onOpenProject(project)}
       className="group relative aspect-[4/5] overflow-hidden cursor-pointer bg-black/5 border border-black/10 tech-card"
     >
-      <div className="hud-corner hud-corner-tl opacity-0 group-hover:opacity-100 transition-opacity" />
-      <div className="hud-corner hud-corner-br opacity-0 group-hover:opacity-100 transition-opacity" />
-      
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 p-4 md:p-8">
         <img 
           src={`https://picsum.photos/seed/${project.title}/800/1000`}
           alt={project.title}
-          className="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-1000 group-hover:scale-110 opacity-40 group-hover:opacity-100"
+          className="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-1000 group-hover:scale-105 opacity-40 group-hover:opacity-100"
           referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-bg via-transparent to-transparent opacity-90" />
@@ -38,32 +35,32 @@ const ProjectCard: React.FC<{ project: Project; onOpenProject: (project: Project
         <motion.div 
           animate={{ top: ['0%', '100%', '0%'] }}
           transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-          className="absolute left-0 right-0 h-[1px] bg-black/40 shadow-[0_0_10px_rgba(0,0,0,0.2)] z-20 opacity-0 group-hover:opacity-100"
+          className="absolute left-4 right-4 md:left-8 md:right-8 h-[1px] bg-black/40 shadow-[0_0_10px_rgba(0,0,0,0.2)] z-20 opacity-0 group-hover:opacity-100"
         />
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 p-8 z-10">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <span className="text-black font-mono text-[8px] font-bold tracking-[0.4em] uppercase">LOG_ENTRY: {project.category}</span>
-            <div className="h-[1px] w-8 bg-black/20" />
+      <div className="absolute inset-x-0 bottom-0 p-2 md:p-8 z-10">
+        <div className="flex items-center justify-between mb-1 md:mb-4">
+          <div className="flex items-center gap-1 md:gap-3">
+            <span className="text-black font-mono text-[5px] md:text-[8px] font-bold tracking-[0.2em] md:tracking-[0.4em] uppercase">LOG: {project.category}</span>
+            <div className="h-[1px] w-2 md:w-8 bg-black/20" />
           </div>
-          <div className="flex gap-2">
+          <div className="hidden sm:flex gap-1 md:gap-2">
             {project.tags.slice(0, 2).map((tag, i) => (
-              <span key={i} className="text-[7px] font-mono border border-black/10 px-1.5 py-0.5 opacity-40 group-hover:opacity-100 transition-opacity uppercase">{tag}</span>
+              <span key={i} className="text-[6px] md:text-[7px] font-mono border border-black/10 px-1 md:px-1.5 py-0.5 opacity-60 md:opacity-40 group-hover:opacity-100 transition-opacity uppercase">{tag}</span>
             ))}
           </div>
         </div>
         
-        <h3 className="text-3xl font-mono font-bold text-fg mb-4 tracking-tight group-hover:text-black transition-colors uppercase leading-none">{project.title}</h3>
+        <h3 className="text-sm md:text-3xl font-mono font-bold text-fg mb-1 md:mb-4 tracking-tight group-hover:text-black transition-colors uppercase leading-none">{project.title}</h3>
         
-        <div className="space-y-4 overflow-hidden">
-          <p className="text-[10px] text-black/60 font-mono italic line-clamp-2 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+        <div className="space-y-1 md:space-y-4 overflow-hidden">
+          <p className="text-[6px] md:text-[10px] text-black/60 font-mono italic line-clamp-1 md:line-clamp-2 md:opacity-0 group-hover:opacity-100 transition-all duration-500 transform md:translate-y-4 group-hover:translate-y-0">
             {'>'} {project.description}
           </p>
           
-          {/* Tech Stack Visualization */}
-          <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-700 delay-100 transform translate-y-4 group-hover:translate-y-0">
+          {/* Tech Stack Visualization - Hidden on small mobile to save space */}
+          <div className="hidden md:flex flex-col gap-2 md:opacity-0 group-hover:opacity-100 transition-all duration-700 delay-100 transform md:translate-y-4 group-hover:translate-y-0">
             <div className="flex justify-between items-center">
               <span className="text-[7px] font-mono opacity-40 uppercase tracking-widest">Tech_Stack_Integration</span>
               <span className="text-[7px] font-mono opacity-40 uppercase">98%</span>
@@ -81,15 +78,15 @@ const ProjectCard: React.FC<{ project: Project; onOpenProject: (project: Project
             </div>
           </div>
           
-          <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-all duration-700 delay-200 transform translate-y-4 group-hover:translate-y-0">
+          <div className="flex items-center gap-4 md:opacity-0 group-hover:opacity-100 transition-all duration-700 delay-200 transform md:translate-y-4 group-hover:translate-y-0">
             <div className="flex -space-x-2">
               {[Cpu, Activity, Database].map((Icon, i) => (
                 <motion.div 
                   key={i} 
                   whileHover={{ scale: 1.3, zIndex: 10 }}
-                  className="w-6 h-6 rounded-full bg-black flex items-center justify-center border border-bg relative"
+                  className="w-4 h-4 md:w-6 md:h-6 rounded-[0.3px] bg-black flex items-center justify-center border border-bg relative"
                 >
-                  <Icon size={10} className="text-white" />
+                  <Icon size={8} className="md:w-[10px] md:h-[10px] text-white" />
                 </motion.div>
               ))}
             </div>
@@ -97,7 +94,7 @@ const ProjectCard: React.FC<{ project: Project; onOpenProject: (project: Project
               <motion.div 
                 animate={{ opacity: [0.4, 1, 0.4] }}
                 transition={{ duration: 2, repeat: Infinity }}
-                className="w-1.5 h-1.5 rounded-full bg-black"
+                className="w-1.5 h-1.5 rounded-[0.3px] bg-black"
               />
               <span className="text-[8px] font-mono font-bold tracking-widest uppercase opacity-40">System_Ready</span>
             </div>
@@ -106,8 +103,8 @@ const ProjectCard: React.FC<{ project: Project; onOpenProject: (project: Project
       </div>
 
       <div className="absolute top-8 right-8 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-        <div className="w-12 h-12 border border-black/30 flex items-center justify-center text-black bg-white/80 backdrop-blur-md">
-          <ArrowUpRight size={20} />
+        <div className="w-10 h-10 md:w-12 md:h-12 border border-black/30 flex items-center justify-center text-black bg-white/80 backdrop-blur-md">
+          <ArrowUpRight size={16} className="md:w-5 md:h-5" />
         </div>
       </div>
     </motion.div>
@@ -177,10 +174,10 @@ const ProjectsSection: React.FC<{ lang: 'fr' | 'en' }> = ({ lang }) => {
         DATA_STREAM_ACTIVE // 0x44F2
       </div>
 
-      <div className="mb-8 md:mb-12 w-full relative z-10">
-        <div className="flex flex-col lg:flex-row lg:items-end justify-end gap-8 md:gap-12">
-          {/* Category Filter */}
-          <div className="flex flex-wrap gap-2 md:gap-3">
+      <div className="mb-6 md:mb-12 w-full relative z-10">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-center lg:justify-end gap-4 md:gap-12">
+          {/* Category Filter - Horizontal Scroll on Mobile */}
+          <div className="flex flex-row md:flex-wrap justify-start md:justify-end gap-2 md:gap-3 overflow-x-auto scrollbar-hide pb-2 md:pb-0 w-full md:w-auto">
             {categories.map(cat => {
               const id = cat === 'Computer Vision' ? 'vision' : 
                          cat === 'NLP' ? 'nlp' : 
@@ -206,7 +203,7 @@ const ProjectsSection: React.FC<{ lang: 'fr' | 'en' }> = ({ lang }) => {
       </div>
 
       {/* Projects Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 w-full relative z-10">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8 w-full relative z-10">
         <AnimatePresence mode="popLayout">
           {filteredProjects.map((project, idx) => (
             <ProjectCard 
@@ -219,13 +216,13 @@ const ProjectsSection: React.FC<{ lang: 'fr' | 'en' }> = ({ lang }) => {
         </AnimatePresence>
       </div>
 
-      {/* Laboratory Metadata Footer */}
-      <div className="mt-24 w-full flex justify-between items-end text-[10px] font-mono opacity-20 uppercase tracking-[0.4em] border-t border-black/10 pt-8">
-        <div className="flex flex-col gap-2">
+      {/* Laboratory Metadata Footer - Hidden on mobile */}
+      <div className="mt-12 md:mt-24 w-full flex flex-col md:flex-row justify-between items-start md:items-end text-[8px] md:text-[10px] font-mono opacity-20 uppercase tracking-[0.4em] border-t border-black/10 pt-6 md:pt-8 gap-4">
+        <div className="flex flex-col gap-1 md:gap-2">
           <span>Experiments_Count: {PROJECTS.length}</span>
-          <span>Last_Update: 2026.03.25</span>
+          <span className="hidden sm:inline">Last_Update: 2026.03.25</span>
         </div>
-        <div className="text-right">
+        <div className="text-left md:text-right">
           <span>System_Core: Stable</span>
         </div>
       </div>

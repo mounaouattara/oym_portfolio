@@ -28,7 +28,7 @@ const WorkflowModal: React.FC<WorkflowModalProps> = ({ isOpen, onClose, project 
                 <div className="p-8 border-b border-white/5 flex justify-between items-center relative z-10">
                     <div className="flex flex-col">
                         <div className="flex items-center gap-3 mb-2">
-                            <div className="w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
+                            <div className="w-1.5 h-1.5 bg-white rounded-[0.3px] shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
                             <span className="font-mono text-[10px] text-white/40 tracking-[0.4em] uppercase">Architecture_Specs</span>
                         </div>
                         <h2 className="text-4xl font-bold text-white tracking-tight uppercase font-display">

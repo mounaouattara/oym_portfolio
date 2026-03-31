@@ -13,33 +13,29 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-12 lg:p-24">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="absolute inset-0 bg-bg/90 backdrop-blur-xl"
+          className="absolute inset-0 bg-bg/80 backdrop-blur-md"
         />
         
         <motion.div
-          initial={{ opacity: 0, scale: 0.98, y: 10 }}
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.98, y: 10 }}
-          className="relative w-full max-w-5xl h-full md:h-auto md:max-h-[90vh] overflow-hidden bg-bg border border-black/20 flex flex-col md:flex-row shadow-[0_0_50px_rgba(0,0,0,0.05)] tech-card"
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          className="relative w-full max-w-2xl max-h-[65vh] md:max-h-[60vh] overflow-hidden bg-bg border border-black/20 flex flex-col md:flex-row shadow-[0_30px_60px_rgba(0,0,0,0.1)] tech-card"
         >
-          {/* HUD Corners */}
-          <div className="hud-corner hud-corner-tl" />
-          <div className="hud-corner hud-corner-br" />
-          
           <button 
             onClick={onClose}
-            className="absolute top-4 right-4 md:top-6 md:right-6 z-[110] p-3 bg-black/10 backdrop-blur-md text-black hover:bg-black hover:text-bg transition-all hover:scale-110 border border-black/20 rounded-full md:rounded-none"
+            className="absolute top-4 right-4 md:top-6 md:right-6 z-[110] p-3 bg-black/10 backdrop-blur-md text-black hover:bg-black hover:text-bg transition-all hover:scale-110 border border-black/20 rounded-[0.3px] md:rounded-none"
           >
             <X size={20} />
           </button>
 
-          <div className="w-full md:w-2/5 relative h-64 md:h-auto overflow-hidden bg-black/5 border-b md:border-b-0 md:border-r border-black/10 shrink-0">
+          <div className="w-full md:w-1/3 relative h-64 md:h-auto overflow-hidden bg-black/5 border-b md:border-b-0 md:border-r border-black/10 shrink-0">
             <img 
               src={project.imageUrl || `https://picsum.photos/seed/${project.title}/800/1200`}
               alt={project.title}
@@ -59,14 +55,14 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
               <span className="text-[8px] md:text-[10px] font-mono font-bold uppercase tracking-[0.4em] text-black mb-2 md:mb-4 block">
                 MODULE_ID: {project.category}
               </span>
-              <h2 className="text-3xl md:text-5xl font-mono font-bold text-fg leading-none tracking-tighter mb-2 md:mb-6 uppercase">
+              <h2 className="text-2xl md:text-4xl font-mono font-bold text-fg leading-none tracking-tighter mb-2 md:mb-6 uppercase">
                 {project.title}
               </h2>
             </div>
           </div>
 
           {/* Right: Details */}
-          <div className="w-full md:w-3/5 p-6 md:p-16 overflow-y-auto custom-scrollbar bg-black/5 backdrop-blur-xl flex-grow">
+          <div className="w-full md:w-2/3 p-6 md:p-16 overflow-y-auto custom-scrollbar bg-black/5 backdrop-blur-xl flex-grow">
             <div className="space-y-8 md:space-y-16">
               <section>
                 <div className="flex items-center gap-4 mb-4 md:mb-8 text-black/60">

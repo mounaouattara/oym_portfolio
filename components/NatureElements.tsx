@@ -169,7 +169,7 @@ export const NatureCore: React.FC = () => {
       
       {/* Central Seed / Life Source */}
       <motion.div 
-        className="w-24 h-24 md:w-32 md:h-32 rounded-full border-2 border-current flex items-center justify-center relative z-10"
+        className="w-24 h-24 md:w-32 md:h-32 rounded-[0.3px] border-2 border-current flex items-center justify-center relative z-10"
         animate={{ scale: [1, 1.1, 1] }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
       >
@@ -180,7 +180,7 @@ export const NatureCore: React.FC = () => {
         
         {/* Orbits */}
         <motion.div 
-          className="absolute inset-[-20px] border border-dashed border-current opacity-20 rounded-full"
+          className="absolute inset-[-20px] border border-dashed border-current opacity-20 rounded-[0.3px]"
           animate={{ rotate: 360 }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
         />
@@ -190,7 +190,7 @@ export const NatureCore: React.FC = () => {
       {[...Array(15)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-1 h-1 bg-current rounded-full"
+          className="absolute w-1 h-1 bg-current rounded-[0.3px]"
           initial={{ 
             x: (Math.random() - 0.5) * 100, 
             y: (Math.random() - 0.5) * 100,

@@ -15,6 +15,23 @@
     0% { transform: translateY(-100%); }
     100% { transform: translateY(100%); }
   }
+  @keyframes glitch {
+    0% { clip-path: inset(80% 0 0 0); transform: translate(-2px, -2px); }
+    10% { clip-path: inset(10% 0 85% 0); transform: translate(2px, 2px); }
+    20% { clip-path: inset(80% 0 0 0); transform: translate(-2px, -2px); }
+    30% { clip-path: inset(10% 0 85% 0); transform: translate(2px, 2px); }
+    40% { clip-path: inset(50% 0 30% 0); transform: translate(-2px, -2px); }
+    50% { clip-path: inset(0% 0 70% 0); transform: translate(2px, 2px); }
+    60% { clip-path: inset(80% 0 0 0); transform: translate(-2px, -2px); }
+    70% { clip-path: inset(10% 0 85% 0); transform: translate(2px, 2px); }
+    80% { clip-path: inset(80% 0 0 0); transform: translate(-2px, -2px); }
+    90% { clip-path: inset(10% 0 85% 0); transform: translate(2px, 2px); }
+    100% { clip-path: inset(80% 0 0 0); transform: translate(-2px, -2px); }
+  }
+  @keyframes data-stream {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+  }
   @keyframes spin-slow {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
@@ -30,6 +47,8 @@
   }
 
   --animate-scan: scan 3s linear infinite;
+  --animate-glitch: glitch 0.5s infinite;
+  --animate-data-stream: data-stream 20s linear infinite;
   --animate-spin-slow: spin-slow 20s linear infinite;
   --animate-reverse-spin: reverse-spin 15s linear infinite;
   --animate-liquid: liquid 8s ease-in-out infinite;
@@ -222,7 +241,7 @@ body {
 .hud-corner {
   width: 10px;
   height: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 0.3px solid rgba(0, 0, 0, 0.2);
 }
 
 /* Section Transitions */

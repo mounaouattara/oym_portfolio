@@ -67,14 +67,14 @@ const AIAssistant: React.FC<{onClose: () => void}> = ({ onClose }) => {
             <div>
               <h3 className="text-sm font-bold text-white uppercase tracking-widest">Assistant IA</h3>
               <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                <div className="w-1.5 h-1.5 bg-green-500 rounded-[0.3px] animate-pulse" />
                 <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">En ligne</span>
               </div>
             </div>
           </div>
           <button 
             onClick={onClose}
-            className="p-2 hover:bg-white/5 rounded-full transition-colors text-white/40 hover:text-white"
+            className="p-2 hover:bg-white/5 rounded-[0.3px] transition-colors text-white/40 hover:text-white"
           >
             <X className="w-6 h-6" />
           </button>
